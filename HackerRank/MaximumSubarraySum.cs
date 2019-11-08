@@ -190,6 +190,7 @@ namespace HackerRank
                 Int32 lptr = 0;
                 for (int i = 1; i < arr.Length; i++)
                 {
+                    //qqq
                     Int64 temp = s + arr[i] % m;
                     while (temp >= m )
                     {
