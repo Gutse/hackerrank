@@ -140,8 +140,8 @@ namespace HackerRank
         public override void GenSamples()
         {
             LoadSamples("11");
-            //Samples.Add(new MaximumSubarraySumSample() { });
-            //Answers.Add(new MaximumSubarraySumAnswer() { });
+            Samples.Add(new MaximumSubarraySumSample() {m = 7, arr = new Int64[] {3,4,5,3,2,3,7} });
+            Answers.Add(new MaximumSubarraySumAnswer() {result = 6 });
         }
 
         //[SolutionMethod]
@@ -184,24 +184,40 @@ namespace HackerRank
             
             Int64 s = arr[0] % m;
             Int64 result = s;
-            
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = arr[i] % m;
+            }
             if (result != m-1)
             {
-                Int32 lptr = 0;
+
+                Int64[] v = new Int64[ arr.Length * (arr.Length+1) /2] ;
+                Int32 vc = 1;
+                v[0] = arr[0];
+
                 for (int i = 1; i < arr.Length; i++)
                 {
-                    //qqq
-                    Int64 temp = s + arr[i] % m;
-                    while (temp >= m )
+                    for (int j = 0; j < vc; j++)
                     {
-                        temp -= arr[lptr];
-                        lptr++;
+                        v[j] = (v[j] + arr[i]) % m;
+                        if (v[j] == m - 1)
+                        {
+                            result = v[j];
+                            break;
+                        }
+                        if (v[j] > result)
+                        {
+                            result = v[j];
+                        }
                     }
-                    if (temp > result)
+                    v[vc] = arr[i];
+                    vc++;
+
+
+                    if (result == m - 1)
                     {
-                        result = temp;
+                        break;
                     }
-                    s = temp;
                 }
 
             }
