@@ -145,39 +145,7 @@ namespace HackerRank
             Answers.Add(new MaximumSubarraySumAnswer() { result = 6 });
         }
 
-        //[SolutionMethod]
-        public MaximumSubarraySumAnswer DP(MaximumSubarraySumSample sample)
-        {
-            Int64[] arr = sample.arr;
-            Int64 m = sample.m;
-
-
-            Int64[,] DP = new Int64[2, arr.Length + 1];
-            Int64 Max = 0;
-            Int32 r = 1;
-
-            for (int i = 1; i <= arr.Length; i++)
-            {
-                for (int j = i; j <= arr.Length; j++)
-                {
-                    DP[r, j] = (DP[r ^ 1, j - 1] + arr[j - 1] % m) % m;
-                    if (DP[r, j] > Max)
-                    {
-                        Max = DP[r, j];
-                    }
-
-                }
-                if (Max == m - 1)
-                {
-                    break;
-                }
-
-                r ^= 1;
-            }
-
-            return new MaximumSubarraySumAnswer() { result = Max };
-        }
-
+        
         //[SolutionMethod]
         public MaximumSubarraySumAnswer OpDP(MaximumSubarraySumSample sample)
         {
@@ -337,9 +305,9 @@ namespace HackerRank
         public MaximumSubarraySumAnswer SumsArray(MaximumSubarraySumSample sample)
         {
             Int64[] arr = sample.arr;
-
-            Int64[] sums = new Int64[arr.Length];
             Int64 m = sample.m;
+            Int64[] sums = new Int64[arr.Length];
+            
             Int64 result = 0;
 
             Int64 temp = 0;
@@ -358,20 +326,7 @@ namespace HackerRank
                 }
             }
 
-            /*
-            //141706835
-            for (int i = 0; i < sums.Length-2; i++)
-            {
-                for (int j = i+1; j < sums.Length; j++)
-                {
-                    temp = (sums[j] - sums[i] + m) % m;
-                    if (temp == 141706835)
-                    {
-                        Console.WriteLine(1);
-                    }
-                }
-            }
-            */
+            
             Int32[] idx = Enumerable.Range(0, sums.Length).ToArray();
             QS(sums, 0, sums.Length - 1, idx);
             
