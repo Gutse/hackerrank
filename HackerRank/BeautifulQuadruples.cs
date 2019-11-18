@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,50 +10,56 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class BeautifulQuadruplesSample
+    public class BeautifulQuadruplesSample: TSample
     {
         public Int32[] arr;
     }
 
-    public class BeautifulQuadruplesAnswer
+    public class BeautifulQuadruplesAnswer: TAnswer
     {
         public Int64 result;
         public override string ToString()
         {
             return result.ToString();
         }
+        public override Boolean Equals(Object obj)
+        {
+            return (obj as BeautifulQuadruplesAnswer)?.result == this.result;
+        }
     }
 
 
-    class BeautifulQuadruples : TProblem<BeautifulQuadruplesSample, BeautifulQuadruplesAnswer>
+    class BeautifulQuadruples : TProblem
     {
-        private Random rnd = new Random();
-
-
-        public override void GenSamples()
+        public override void CreateSamples(StreamReader reader)
         {
-            /*
-            
+        }
+
+        public override void CreateAnswers(StreamReader reader)
+        {
+        }
+
+        public override void AddManualSamples()
+        {
+            Samples.Add(new BeautifulQuadruplesSample() { arr = new Int32[] { 1951, 2709, 1793, 129 } }); // всего 1680, повторов 1405, уникальных 275 Ответ 243
+            Answers.Add(new BeautifulQuadruplesAnswer() { result = 317714055759 });
             Samples.Add(new BeautifulQuadruplesSample() { arr = new Int32[] { 1, 2, 3, 4 } });
             Answers.Add(new BeautifulQuadruplesAnswer() { result = 11 });
 
             Samples.Add(new BeautifulQuadruplesSample() { arr = new Int32[] { 2, 3, 4, 5 } }); // повторов 78 + 15 нолей = 93
             Answers.Add(new BeautifulQuadruplesAnswer() { result = 34 });
-            
+
 
             Samples.Add(new BeautifulQuadruplesSample() { arr = new Int32[] { 5, 6, 7, 8 } }); // всего 1680, повторов 1405, уникальных 275 Ответ 243
             Answers.Add(new BeautifulQuadruplesAnswer() { result = 243 });
-            */
-            Samples.Add(new BeautifulQuadruplesSample() { arr = new Int32[] { 1951, 2709, 1793, 129 } }); // всего 1680, повторов 1405, уникальных 275 Ответ 243
-            Answers.Add(new BeautifulQuadruplesAnswer() { result = 317714055759 });
+        }
 
-
-            
-
-                
-
+        public override void TargetedSamples()
+        {
 
         }
+
+
 
         //[SolutionMethod]
         public BeautifulQuadruplesAnswer Straight(BeautifulQuadruplesSample sample)
@@ -87,14 +94,6 @@ namespace HackerRank
 
             return new BeautifulQuadruplesAnswer() { result = res };
         }
-
-
-        public override bool CheckAnswer(int SampleID, BeautifulQuadruplesAnswer Answer)
-        {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer.result == Answers[SampleID].result;
-        }
-
         //[SolutionMethod]
         public BeautifulQuadruplesAnswer DP(BeautifulQuadruplesSample sample)
         {
@@ -358,10 +357,12 @@ namespace HackerRank
             }
             Console.WriteLine($"Total combs {a * b * c * d} Uniques {uniques} Doubles {doubles} Right answer {res } Total Zeroes {Zeroes} Zeroes2 {Zeroes2}");
         }
+
         [SolutionMethod]
-        public BeautifulQuadruplesAnswer DP2(BeautifulQuadruplesSample sample)
+        public TAnswer DP2(TSample Sample)
         {
-            
+
+            BeautifulQuadruplesSample sample = Sample as BeautifulQuadruplesSample;
             //sampleInfo(sample);
             Array.Sort(sample.arr);
             Int32 a = sample.arr[0];
@@ -454,10 +455,11 @@ namespace HackerRank
             return new BeautifulQuadruplesAnswer() { result = result };
         }
 
-        [SolutionMethod]
-        public BeautifulQuadruplesAnswer DP3(BeautifulQuadruplesSample sample)
+        //[SolutionMethod]
+        public TAnswer DP3(TSample Sample)
         {
-            
+            BeautifulQuadruplesSample sample = Sample as BeautifulQuadruplesSample;
+
             Array.Sort(sample.arr);
             Int32 a = sample.arr[0];
             Int32 b = sample.arr[1];

@@ -9,74 +9,92 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class MRotateSample
+    public class MRotateSample : TSample
     {
         public List<List<Int64>> matrix;
         public Int32 r = 1;
 
     }
 
-    public class MRotateAnswer
+    public class MRotateAnswer : TAnswer
     {
         public List<List<Int64>> matrix;
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            MRotateAnswer ans = obj as MRotateAnswer;
+            if (ans?.matrix?.Count != matrix?.Count)
+            {
+                return false;
+            }
+            for (int i = 0; i < matrix?.Count; i++)
+            {
+                if (matrix[i]?.Count != ans?.matrix[i]?.Count)
+                {
+                    return false;
+                }
+                for (int j = 0; j < matrix[i].Count; j++)
+                {
+                    if (matrix[i][j] != ans.matrix[i][j])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 
 
 
-    class MRotate : TProblem<MRotateSample, MRotateAnswer>
+    class MRotate : TProblem
     {
-        private Random rnd = new Random();
 
 
-        public override void GenSamples()
+        public override void AddManualSamples()
         {
-
-            /*
-                1 2 3 4
-                5 6 7 8
-                9 10 11 12
-                13 14 15 16 
-            
-             */
-            /*
-                        List<List<Int64>> m = new List<List<Int64>>();
-                        m.Add(new List<Int64>() { 1, 2, 3, 4 });
-                        m.Add(new List<Int64>() { 5, 6, 7, 8, });
-                        m.Add(new List<Int64>() { 9, 10, 11, 12 });
-                        m.Add(new List<Int64>() { 13, 14, 15, 16 });
-
-                        List<List<Int64>> ma = new List<List<Int64>>();
-                        ma.Add(new List<Int64>() { 2, 3, 4, 8 });
-                        ma.Add(new List<Int64>() { 1, 7, 11, 12 });
-                        ma.Add(new List<Int64>() { 5, 6, 10, 16 });
-                        ma.Add(new List<Int64>() { 9, 13, 14, 15 });
-
-                        Samples.Add(new MRotateSample() { matrix = m });
-
-                        Answers.Add(new MRotateAnswer() { matrix = ma });
-
-
-                        m = new List<List<Int64>>();
-                        m.Add(new List<Int64>() { 1, 2, 3, 4, });
-                        m.Add(new List<Int64>() { 7, 8, 9, 10 });
-                        m.Add(new List<Int64>() { 13, 14, 15, 16 });
-                        m.Add(new List<Int64>() { 19, 20, 21, 22 });
-                        m.Add(new List<Int64>() { 25, 26, 27, 28 });
-
-                        ma = new List<List<Int64>>();
-                        ma.Add(new List<Int64>() { 28, 27, 26, 25 });
-                        ma.Add(new List<Int64>() { 22, 9, 15, 19 });
-                        ma.Add(new List<Int64>() { 16, 8, 21, 13 });
-                        ma.Add(new List<Int64>() { 10, 14, 20, 7 });
-                        ma.Add(new List<Int64>() { 4, 3, 2, 1 });
-
-
-                        Samples.Add(new MRotateSample() { matrix = m, r = 7 });
-
-                        Answers.Add(new MRotateAnswer() { matrix = ma });
-                        */
-
             List<List<Int64>> m = new List<List<Int64>>();
+            m.Add(new List<Int64>() { 1, 2, 3, 4 });
+            m.Add(new List<Int64>() { 5, 6, 7, 8, });
+            m.Add(new List<Int64>() { 9, 10, 11, 12 });
+            m.Add(new List<Int64>() { 13, 14, 15, 16 });
+
+            List<List<Int64>> ma = new List<List<Int64>>();
+            ma.Add(new List<Int64>() { 2, 3, 4, 8 });
+            ma.Add(new List<Int64>() { 1, 7, 11, 12 });
+            ma.Add(new List<Int64>() { 5, 6, 10, 16 });
+            ma.Add(new List<Int64>() { 9, 13, 14, 15 });
+
+            Samples.Add(new MRotateSample() { matrix = m });
+
+            Answers.Add(new MRotateAnswer() { matrix = ma });
+
+
+            m = new List<List<Int64>>();
+            m.Add(new List<Int64>() { 1, 2, 3, 4, });
+            m.Add(new List<Int64>() { 7, 8, 9, 10 });
+            m.Add(new List<Int64>() { 13, 14, 15, 16 });
+            m.Add(new List<Int64>() { 19, 20, 21, 22 });
+            m.Add(new List<Int64>() { 25, 26, 27, 28 });
+
+            ma = new List<List<Int64>>();
+            ma.Add(new List<Int64>() { 28, 27, 26, 25 });
+            ma.Add(new List<Int64>() { 22, 9, 15, 19 });
+            ma.Add(new List<Int64>() { 16, 8, 21, 13 });
+            ma.Add(new List<Int64>() { 10, 14, 20, 7 });
+            ma.Add(new List<Int64>() { 4, 3, 2, 1 });
+
+
+            Samples.Add(new MRotateSample() { matrix = m, r = 7 });
+
+            Answers.Add(new MRotateAnswer() { matrix = ma });
+
+
+            m = new List<List<Int64>>();
             m.Add(new List<Int64>() { 38950343, 46927501, 52732087, 79096784, 99768969, 87107645, 10655095, 46677242, 33633183, 16379998, 27254248, 42691669, 36996828, 39112247, 88842074, 24498867, 24431906, 2183515, 24518860, 8314921, 61842591, 4075781, 78546289, 38723163, 54296259, 58332834, 72221222, 76060312, 73789550, 83838565, 39249266, 60702778, 26036952, 90167124, 27699771 });
             m.Add(new List<Int64>() { 16890510, 84763994, 62683333, 36330960, 52963972, 67006619, 29122446, 93405938, 99753158, 83562860, 7054176, 92077306, 4345791, 75012462, 89936676, 68000196, 62575180, 35614647, 28391955, 42040554, 30306484, 34913710, 2884941, 53777471, 963349, 70026715, 64164289, 79955530, 74725282, 20357033, 38623679, 66125006, 73439290, 30872072, 57168246 });
             m.Add(new List<Int64>() { 99414907, 74527659, 20102991, 68221497, 15715836, 47037040, 94668793, 38183872, 65506647, 73462209, 53396698, 25954898, 59140985, 32091272, 81005196, 42056652, 74616728, 96357248, 63835792, 67447027, 38683492, 80044320, 8263886, 12287085, 85600270, 20185300, 6188842, 40727578, 56937426, 43100133, 71397805, 74205441, 30524204, 3263549, 65617321 });
@@ -98,7 +116,7 @@ namespace HackerRank
             m.Add(new List<Int64>() { 2328139, 68833569, 84484742, 91643453, 19155178, 22972630, 89124861, 92191840, 37917430, 26036236, 50605927, 17961383, 87387637, 84624143, 51838240, 64544198, 67385670, 94179595, 9084225, 81057184, 83556907, 17099263, 78653234, 5556927, 71897925, 37487010, 19452400, 56793626, 66658091, 12610715, 69172447, 63154172, 77452579, 72859638, 74406930 });
             m.Add(new List<Int64>() { 24195466, 19254443, 44363078, 13147904, 55344681, 82390365, 81419403, 61870543, 62144103, 38746759, 99497737, 88813748, 26843833, 55099909, 93812968, 83352, 67196515, 24815879, 13337908, 25849048, 44983993, 35122953, 35604833, 10175640, 60106567, 58741395, 53761820, 59923877, 64991337, 95862345, 44087642, 15675488, 73626867, 95299715, 29532209 });
 
-            List<List<Int64>> ma = new List<List<Int64>>();
+            ma = new List<List<Int64>>();
             ma.Add(new List<Int64>() { 61842591, 4075781, 78546289, 38723163, 54296259, 58332834, 72221222, 76060312, 73789550, 83838565, 39249266, 60702778, 26036952, 90167124, 27699771, 57168246, 65617321, 57904517, 9278234, 52505001, 59643645, 82803519, 52686070, 87324151, 53568652, 54078615, 63385964, 37751016, 93829018, 1918495, 71361633, 88248491, 74406930, 29532209, 95299715 });
             ma.Add(new List<Int64>() { 8314921, 34913710, 2884941, 53777471, 963349, 70026715, 64164289, 79955530, 74725282, 20357033, 38623679, 66125006, 73439290, 30872072, 3263549, 17912741, 32682148, 55012614, 4329732, 13739959, 24647410, 63581494, 46339150, 25561726, 95822938, 54761946, 12012533, 90804743, 4651809, 45404222, 72859638, 77452579, 63154172, 69172447, 73626867 });
             ma.Add(new List<Int64>() { 24518860, 30306484, 8263886, 12287085, 85600270, 20185300, 6188842, 40727578, 56937426, 43100133, 71397805, 74205441, 30524204, 76221723, 86840745, 37096588, 45460956, 19076056, 67978531, 52258178, 9860620, 96898348, 69061170, 14794853, 68185691, 49209530, 98634485, 65450803, 77633152, 11254100, 55864506, 11915871, 58770443, 12610715, 15675488 });
@@ -120,7 +138,7 @@ namespace HackerRank
             ma.Add(new List<Int64>() { 52732087, 52963972, 36330960, 62683333, 84763994, 74527659, 56974984, 97453699, 42441944, 10546334, 86194626, 33366533, 3097132, 91346726, 55350739, 17225955, 80510009, 66718961, 62746400, 32526254, 24326862, 68833569, 84484742, 91643453, 19155178, 22972630, 89124861, 92191840, 37917430, 26036236, 50605927, 17961383, 87387637, 84624143, 83352 });
             ma.Add(new List<Int64>() { 46927501, 38950343, 16890510, 99414907, 12791945, 8706735, 65009421, 75762177, 84321666, 33841807, 23243869, 37755625, 55336990, 77626125, 27904950, 6916800, 79615390, 63012775, 2716447, 2328139, 24195466, 19254443, 44363078, 13147904, 55344681, 82390365, 81419403, 61870543, 62144103, 38746759, 99497737, 88813748, 26843833, 55099909, 93812968 });
 
-            Samples.Add(new MRotateSample() { matrix = m, r = 20  });
+            Samples.Add(new MRotateSample() { matrix = m, r = 20 });
 
             Answers.Add(new MRotateAnswer() { matrix = ma });
 
@@ -128,10 +146,9 @@ namespace HackerRank
 
         }
 
-        //static Int32[,] RotateContur(Int32[,] arr, Int32 Contur) {
         static void RotateRing(List<List<Int32>> arr, Int32 Ring, Int32 Rotates)
         {
-            Int32 RingLength = 2 * (arr.Count - 2*Ring - 1) + 2 * (arr[0].Count - 2*Ring - 1);
+            Int32 RingLength = 2 * (arr.Count - 2 * Ring - 1) + 2 * (arr[0].Count - 2 * Ring - 1);
             Rotates = Rotates % RingLength;
             Int32 MaxX = arr.Count - Ring - 1;
             Int32 MaxY = arr[0].Count - Ring - 1;
@@ -199,7 +216,7 @@ namespace HackerRank
         {
             for (int i = 0; i < arr.Count; i++)
             {
-                
+
                 for (int j = 0; j < arr[0].Count; j++)
                 {
                     Console.Write($"{arr[i][j]} ");
@@ -209,7 +226,8 @@ namespace HackerRank
         }
 
 
-        static void RotateRing2(List<List<Int64>> arr, Int32 Ring, Int64 Rotates) {
+        static void RotateRing2(List<List<Int64>> arr, Int32 Ring, Int64 Rotates)
+        {
             Int64 RingLength = 2 * (arr.Count - 2 * Ring - 1) + 2 * (arr[0].Count - 2 * Ring - 1);
             Rotates = Rotates % RingLength;
             if (Rotates == 0)
@@ -223,14 +241,14 @@ namespace HackerRank
 
             LinkedList<Int64> LRing = new LinkedList<Int64>();
             var First = LRing.AddFirst(arr[Ring][Ring]);
-            var newFirst = First; 
+            var newFirst = First;
 
             var Next = First;
             for (int i = 1; i < RingLength; i++)
             {
                 Int32 NewX = Ring;
                 Int32 NewY = Ring;
-                
+
                 if (i > (2 * (MaxX - Ring) + (MaxY - Ring)))
                 {
                     NewX = Ring;
@@ -306,17 +324,18 @@ namespace HackerRank
                 {
                     newFirst = First;
                 }
-                else {
+                else
+                {
                     newFirst = newFirst.Next;
                 }
 
             }
 
 
-            
-            
 
-            
+
+
+
 
 
         }
@@ -377,7 +396,7 @@ namespace HackerRank
 
 
 
-            
+
             for (int i = 0; i < RingLength; i++)
             {
                 Int32 NewX = Ring;
@@ -434,8 +453,11 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public MRotateAnswer Second(MRotateSample sample)
+        public TAnswer Second(TSample Sample)
+
         {
+            MRotateSample sample = Sample as MRotateSample;
+
             List<List<Int64>> arr = new List<List<Int64>>(sample.matrix);
             Int32 r = sample.r;
             Int32 Rings = Math.Min(arr.Count, arr[0].Count) / 2;
@@ -443,43 +465,12 @@ namespace HackerRank
             {
                 RotateRing3(arr, j, r);
             }
-            PrintMatrix(arr);
             MRotateAnswer ans = new MRotateAnswer() { matrix = arr };
             return ans;
         }
 
 
-        public override bool CheckAnswer(int SampleID, MRotateAnswer Answer)
-        {
-            //return base.CheckAnswer(SampleID, Answer);
-            List<List<Int64>> m1 = Answer?.matrix;
-            List<List<Int64>> m2 = Answers[SampleID].matrix;
-
-            if ((m1?.Count != m2?.Count))
-            {
-                return false;
-            }
-
-
-            for (int i = 0; i < m1.Count; i++)
-            {
-                var m1i = m1[i];
-                var m2i = m2[i];
-                if (m1.Count != m2.Count)
-                {
-                    return false;
-                }
-                for (int j = 0; j < m1i.Count; j++)
-                {
-                    if (m1i[j] != m2i[j])
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
+       
 
 
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class CommonChildSample
+    public class CommonChildSample: TSample
     {
         public String s1;
         public String s2;
@@ -19,115 +20,32 @@ namespace HackerRank
         }
     }
 
-    public class CommonChildAnswer
+    public class CommonChildAnswer:TAnswer
     {
         public Int32 result;
         public override string ToString()
         {
             return result.ToString();
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
+        }
+        public override Boolean Equals(Object obj)
+        {
+            return (obj as CommonChildAnswer)?.result == this.result;
         }
     }
 
 
-    class CommonChild : TProblem<CommonChildSample, CommonChildAnswer>
+    class CommonChild : TProblem
     {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, CommonChildAnswer Answer)
+        public override void CreateSamples(StreamReader reader)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.result == Answers?[SampleID]?.result;
-            /*
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < Answer.arr.Length; i++)
-            {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
-                {
-                    return false;
-                }
-            }
-
-            return true; 
-             */
-        }
-        private void LoadSamples(String opt, String opt2 = "")
-        {
-            void LoadFile(String InputFile, String OutputFile)
-            {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile))
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    CommonChildSample sample = new CommonChildSample() { s1 = reader.ReadLine(), s2 = reader.ReadLine() };
-                    Samples.Add(sample);
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    CommonChildAnswer ans = new CommonChildAnswer() { result = Convert.ToInt32(reader.ReadLine()) };
-                    Answers.Add(ans);
-                }
-            }
-
-
-
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
-            }
+            CommonChildSample sample = new CommonChildSample() { s1 = reader.ReadLine(), s2 = reader.ReadLine() };
+            Samples.Add(sample);
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(StreamReader reader)
         {
-            LoadSamples("All");
-            //Samples.Add(new CommonChildSample() { s1= "WEWOUCUIDGCGTRMEZEPXZFEJWISRSBBSYXAYDFEJJDLEBVHHKS", s2 = "FDAGCXGKCTKWNECHMRXZWMLRYUCOCZHJRRJBOAJOQJZZVUYXIC"});
-
-            //Samples.Add(new CommonChildSample() { s2 = "WEWOUCUIDGCGTRMEZEPXZFEJWISRSBBSYXAYDFEJJDLEBVHHKS", s1 = "FDAGCXGKCTKWNECHMRXZWMLRYUCOCZHJRRJBOAJOQJZZVUYXIC" });
-            //Answers.Add(new CommonChildAnswer() { result = 15 });
+            CommonChildAnswer ans = new CommonChildAnswer() { result = Convert.ToInt32(reader.ReadLine()) };
+            Answers.Add(ans);
         }
 
 
@@ -198,8 +116,10 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public CommonChildAnswer DP(CommonChildSample sample)
+        public TAnswer DP(TSample Sample)
         {
+            CommonChildSample sample = Sample as CommonChildSample;
+
             Int32 result = 0;
             String s1 = sample.s1;
             String s2 = sample.s2;
@@ -264,16 +184,7 @@ namespace HackerRank
             return new CommonChildAnswer() { result = result };
         }
 
-        //[SolutionMethod]
-        public CommonChildAnswer stub(CommonChildSample sample)
-        {
-            Int32 result = 0;
-            String s1 = sample.s1;
-            String s2 = sample.s2;
-
-
-            return new CommonChildAnswer() { result = result };
-        }
+       
 
 
     }

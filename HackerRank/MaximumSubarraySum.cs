@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class MaximumSubarraySumSample
+    public class MaximumSubarraySumSample: TSample
     {
         public Int64[] arr;
         public Int64 m;
@@ -19,7 +20,7 @@ namespace HackerRank
         }
     }
 
-    public class MaximumSubarraySumAnswer
+    public class MaximumSubarraySumAnswer: TAnswer
     {
         public Int64 result;
         public override string ToString()
@@ -38,117 +39,64 @@ namespace HackerRank
             return SB.ToString().Trim();
             */
         }
-    }
-
-
-    class MaximumSubarraySum : TProblem<MaximumSubarraySumSample, MaximumSubarraySumAnswer>
-    {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, MaximumSubarraySumAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.result == Answers?[SampleID]?.result;
+            MaximumSubarraySumAnswer Answer = obj as MaximumSubarraySumAnswer;
+            return Answer.result == this.result;
+
             /*
              if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i < Answer.arr?.Length; i++)
+            for (int i = 0; i < Answer.arr.Length; i++)
             {
                 if (Answer.arr[i] != Answers[SampleID].arr[i])
                 {
                     return false;
                 }
             }
-
-            return true; 
-             */
+            */
         }
-        private void LoadSamples(String opt, String opt2 = "")
+    }
+
+
+    class MaximumSubarraySum : TProblem
+    {
+        public override void CreateSamples(StreamReader reader)
         {
-            void LoadFile(String InputFile, String OutputFile)
+            int q = Convert.ToInt32(reader.ReadLine());
+
+            for (int qItr = 0; qItr < q; qItr++)
             {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile))
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
+                string[] nm = reader.ReadLine().Split(' ');
 
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    int q = Convert.ToInt32(reader.ReadLine());
+                int n = Convert.ToInt32(nm[0]);
 
-                    for (int qItr = 0; qItr < q; qItr++)
-                    {
-                        string[] nm = reader.ReadLine().Split(' ');
+                long m = Convert.ToInt64(nm[1]);
 
-                        int n = Convert.ToInt32(nm[0]);
+                long[] a = Array.ConvertAll(reader.ReadLine().Split(' '), aTemp => Convert.ToInt64(aTemp));
+                MaximumSubarraySumSample sample = new MaximumSubarraySumSample() { arr = a, m = m };
+                Samples.Add(sample);
 
-                        long m = Convert.ToInt64(nm[1]);
-
-                        long[] a = Array.ConvertAll(reader.ReadLine().Split(' '), aTemp => Convert.ToInt64(aTemp));
-                        MaximumSubarraySumSample sample = new MaximumSubarraySumSample() { arr = a, m = m };
-                        Samples.Add(sample);
-
-                    }
-
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        MaximumSubarraySumAnswer ans = new MaximumSubarraySumAnswer() { result = Convert.ToInt64(reader.ReadLine()) };
-                        Answers.Add(ans);
-                    }
-                }
-            }
-
-
-
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
             }
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(StreamReader reader)
         {
-            LoadSamples("11");
-            Samples.Add(new MaximumSubarraySumSample() { m = 7, arr = new Int64[] { 1, 3, 5, 3, 2, 3, 5 } });
-            Answers.Add(new MaximumSubarraySumAnswer() { result = 6 });
+            while (!reader.EndOfStream) {
+                MaximumSubarraySumAnswer ans = new MaximumSubarraySumAnswer() { result = Convert.ToInt64(reader.ReadLine()) };
+                Answers.Add(ans);
+            }
+
         }
 
         
         //[SolutionMethod]
-        public MaximumSubarraySumAnswer OpDP(MaximumSubarraySumSample sample)
+        public TAnswer OpDP(TSample Sample)
         {
+            MaximumSubarraySumSample sample = Sample as MaximumSubarraySumSample;
             Int64[] arr = sample.arr;
             Int64 m = sample.m;
 
@@ -302,8 +250,9 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public MaximumSubarraySumAnswer SumsArray(MaximumSubarraySumSample sample)
+        public TAnswer SumsArray(TSample Sample)
         {
+            MaximumSubarraySumSample sample = Sample as MaximumSubarraySumSample;
             Int64[] arr = sample.arr;
             Int64 m = sample.m;
             Int64[] sums = new Int64[arr.Length];

@@ -9,7 +9,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class CoinChangeSample
+    public class CoinChangeSample:TSample
     {
         public Int64[] c;
         public Int32 n;
@@ -19,44 +19,46 @@ namespace HackerRank
         }
     }
 
-    public class CoinChangeAnswer
+    public class CoinChangeAnswer:TAnswer
     {
         public Int64 w;
         public override string ToString()
         {
             return w.ToString();
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
         }
+
+        public override Boolean Equals(Object obj)
+        {
+            CoinChangeAnswer Answer = obj as CoinChangeAnswer;
+            return Answer.w == this.w;
+        }
+
     }
 
 
-    class CoinChange : TProblem<CoinChangeSample, CoinChangeAnswer>
+    class CoinChange : TProblem
     {
-        private Random rnd = new Random();
-
-
-        public override void GenSamples()
+        public override void CreateSamples(System.IO.StreamReader reader)
         {
-            //Samples.Add(new CoinChangeSample() { c = new Int64[] { 1, 2, 3 }, n = 4 });
-            //Answers.Add(new CoinChangeAnswer() { w = 4 });
+            string[] nm = reader.ReadLine().Split(' ');
 
-            Samples.Add(new CoinChangeSample() { c = new Int64[] { 2, 5, 3, 6 }, n = 10 });
-            Answers.Add(new CoinChangeAnswer() { w = 5 });
+            int n = Convert.ToInt32(nm[0]);
+
+            int m = Convert.ToInt32(nm[1]);
+
+            Int64[] coins = Array.ConvertAll(reader.ReadLine().Split(' '), coinsTemp => Convert.ToInt64(coinsTemp));
+            Samples.Add(new CoinChangeSample() { c= coins, n = n} );
+        }
+
+        public override void CreateAnswers(System.IO.StreamReader reader)
+        {
+            Answers.Add(new CoinChangeAnswer() { w = Convert.ToInt64(reader.ReadLine()) });
         }
 
         [SolutionMethod]
-        public CoinChangeAnswer BruteForce(CoinChangeSample sample) {
+        public TAnswer DP(TSample Sample) {
+            CoinChangeSample sample = Sample as CoinChangeSample;
+
             Int64[] c = sample.c;
             Int32 n = sample.n;
             Int64 result = 0;
@@ -87,29 +89,6 @@ namespace HackerRank
             result = DP[c.Length, n];
             return new CoinChangeAnswer() { w = result};
         }
-
-        public override bool CheckAnswer(int SampleID, CoinChangeAnswer Answer)
-        {
-            return Answer.w == Answers[SampleID].w;
-            //return base.CheckAnswer(SampleID, Answer);
-            /*
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < Answer.arr.Length; i++)
-            {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
-                {
-                    return false;
-                }
-            }
-
-            return true; 
-             */
-        }
-
 
     }
 }

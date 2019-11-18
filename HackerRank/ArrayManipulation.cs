@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class ArrayManipulationSample
+    public class ArrayManipulationSample: TSample
     {
         public Int32[][] queries;
         public Int32 n;
@@ -19,93 +20,51 @@ namespace HackerRank
         }
     }
 
-    public class ArrayManipulationAnswer
+    public class ArrayManipulationAnswer:TAnswer
     {
         public Int64 MaxValue;
         public override string ToString()
         {
             return MaxValue.ToString();
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
+        }
+        public override Boolean Equals(Object obj)
+        {
+            return (obj as ArrayManipulationAnswer)?.MaxValue == this.MaxValue;
         }
     }
 
 
-    class ArrayManipulation : TProblem<ArrayManipulationSample, ArrayManipulationAnswer>
+    class ArrayManipulation : TProblem
     {
-        private Random rnd = new Random();
-        private void LoadSamples()
+        public override void CreateSamples(StreamReader reader)
         {
+            string[] nm = reader.ReadLine().Split(' ');
+            Int32 n = Convert.ToInt32(nm[0]);
+            Int32 m = Convert.ToInt32(nm[1]);
+            Int32[][] queries = new Int32[m][];
 
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\am_input12"))
-            //using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\RKSumInput"))
+            for (int i = 0; i < m; i++)
             {
-                string[] nm = reader.ReadLine().Split(' ');
-                Int32 n = Convert.ToInt32(nm[0]);
-                Int32 m = Convert.ToInt32(nm[1]);
-                Int32[][] queries = new Int32[m][];
-
-                for (int i = 0; i < m; i++)
-                {
-                    Int32[] query = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt32(sTemp));
-                    queries[i] = query;
-                }
-
-                ArrayManipulationSample sample = new ArrayManipulationSample() { n = n, queries = queries };
-                //sample.seq = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp));
-                Samples.Add(sample);
+                Int32[] query = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt32(sTemp));
+                queries[i] = query;
             }
 
-
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\am_output12"))
-            {
-                ArrayManipulationAnswer ans = new ArrayManipulationAnswer() { MaxValue = Convert.ToInt64(reader.ReadLine()) };
-                Answers.Add(ans);
-            }
-
-
+            ArrayManipulationSample sample = new ArrayManipulationSample() { n = n, queries = queries };
+            Samples.Add(sample);
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(StreamReader reader)
         {
-            Int32[] q1 = new Int32[] { 1, 2, 100 };
-            Int32[] q2 = new Int32[] { 2, 5, 100 };
-            Int32[] q3 = new Int32[] { 3, 4, 100 };
-            Int32[][] qs = new Int32[3][];
-            qs[0] = q1;
-            qs[1] = q2;
-            qs[2] = q3;
-
-            // Samples.Add(new ArrayManipulationSample() { n = 5, queries = qs });
-            // Answers.Add(new ArrayManipulationAnswer() { MaxValue = 200 });
-
-            q1 = new Int32[] { 2, 3, 603 };
-            q2 = new Int32[] { 1, 1, 286 };
-            q3 = new Int32[] { 4, 4, 882 };
-            qs = new Int32[3][];
-            qs[0] = q1;
-            qs[1] = q2;
-            qs[2] = q3;
-
-            //Samples.Add(new ArrayManipulationSample() { n = 4, queries = qs });
-            // Answers.Add(new ArrayManipulationAnswer() { MaxValue = 882 });
-            LoadSamples();
+            ArrayManipulationAnswer ans = new ArrayManipulationAnswer() { MaxValue = Convert.ToInt64(reader.ReadLine()) };
+            Answers.Add(ans);
         }
 
+
+       
         //[SolutionMethod]
-        public ArrayManipulationAnswer BruteForce(ArrayManipulationSample sample)
+        public TAnswer BruteForce(TSample Sample)
         {
-
+            ArrayManipulationSample sample = Sample as ArrayManipulationSample;
             Int32 n = sample.n;
             Int32[][] queries = sample.queries;
 
@@ -242,8 +201,9 @@ namespace HackerRank
 
 
         // [SolutionMethod]
-        public ArrayManipulationAnswer TotalBruteForce(ArrayManipulationSample sample)
+        public TAnswer TotalBruteForce(TSample Sample)
         {
+            ArrayManipulationSample sample = Sample as ArrayManipulationSample;
 
             Int32 n = sample.n;
             Int32[][] queries = sample.queries;
@@ -271,8 +231,9 @@ namespace HackerRank
         }
 
         //[SolutionMethod]
-        public ArrayManipulationAnswer Mitm(ArrayManipulationSample sample)
+        public TAnswer Mitm(TSample Sample)
         {
+            ArrayManipulationSample sample = Sample as ArrayManipulationSample;
 
             Int32 n = sample.n;
             Int32[][] queries = sample.queries;
@@ -352,8 +313,10 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public ArrayManipulationAnswer test1(ArrayManipulationSample sample)
+        public TAnswer test1(TSample Sample)
         {
+
+            ArrayManipulationSample sample = Sample as ArrayManipulationSample;
 
             Int32 n = sample.n;
             Int32[][] queries = sample.queries;
@@ -385,8 +348,9 @@ namespace HackerRank
 
         }
         //[SolutionMethod]
-        public ArrayManipulationAnswer DP(ArrayManipulationSample sample)
+        public TAnswer DP(TSample Sample)
         {
+            ArrayManipulationSample sample = Sample as ArrayManipulationSample;
 
             Int32 n = sample.n;
             Int32[][] queries = sample.queries;
@@ -458,8 +422,9 @@ namespace HackerRank
         }
 
         // [SolutionMethod]
-        public ArrayManipulationAnswer DP2(ArrayManipulationSample sample)
+        public TAnswer DP2(TSample Sample)
         {
+            ArrayManipulationSample sample = Sample as ArrayManipulationSample;
 
             Int32 n = sample.n;
             Int32[][] queries = sample.queries;
@@ -528,8 +493,9 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public ArrayManipulationAnswer DP3(ArrayManipulationSample sample)
+        public TAnswer DP3(TSample Sample)
         {
+            ArrayManipulationSample sample = Sample as ArrayManipulationSample;
 
             Int32 n = sample.n;
             Int32[][] queries = sample.queries;
@@ -613,28 +579,7 @@ namespace HackerRank
 
         }
 
-        public override bool CheckAnswer(int SampleID, ArrayManipulationAnswer Answer)
-        {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.MaxValue == Answers?[SampleID]?.MaxValue;
-            /*
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < Answer.arr.Length; i++)
-            {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
-                {
-                    return false;
-                }
-            }
-
-            return true; 
-             */
-        }
-
+        
 
     }
 }

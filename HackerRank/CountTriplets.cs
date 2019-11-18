@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class CountTripletsSample
+    public class CountTripletsSample:TSample
     {
         public Int64 r;
         public List<Int64> arr;
@@ -19,7 +20,7 @@ namespace HackerRank
         }
     }
 
-    public class CountTripletsAnswer
+    public class CountTripletsAnswer:TAnswer
     {
         public Int64 res;
         public override string ToString()
@@ -38,17 +39,10 @@ namespace HackerRank
             return SB.ToString().Trim();
             */
         }
-    }
-
-
-    class CountTriplets : TProblem<CountTripletsSample, CountTripletsAnswer>
-    {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, CountTripletsAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.res == Answers?[SampleID]?.res;
+            return (obj as CountTripletsAnswer)?.res == this.res;
+
             /*
              if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
             {
@@ -62,47 +56,44 @@ namespace HackerRank
                     return false;
                 }
             }
-
-            return true; 
-             */
-        }
-        private void LoadSamples()
-        {
-
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\dia\projects\hackerrank\ctr_input06.txt"))
-            //using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\RKSumInput"))
-            {
-                string[] nm = reader.ReadLine().Split(' ');
-                Int64 n = Convert.ToInt32(nm[0]);
-                Int64 r = Convert.ToInt32(nm[1]);
-
-                List<Int64> list = new List<Int64>();
-
-                List<long> arr = reader.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt64(arrTemp)).ToList();
-
-
-                CountTripletsSample sample = new CountTripletsSample() { arr = arr, r = r };
-                //sample.seq = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp));
-                Samples.Add(sample);
-            }
-
-
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\dia\projects\hackerrank\ctr_output06.txt"))
-            {
-                CountTripletsAnswer ans = new CountTripletsAnswer() { res = Convert.ToInt64(reader.ReadLine()) };
-                Answers.Add(ans);
-            }
-
-
+            */
         }
 
-        public override void GenSamples()
+    }
+
+
+    class CountTriplets : TProblem
+    {
+        public override void CreateSamples(StreamReader reader)
         {
-            //166661666700000
+            string[] nm = reader.ReadLine().Split(' ');
+            Int64 n = Convert.ToInt32(nm[0]);
+            Int64 r = Convert.ToInt32(nm[1]);
+
+            List<Int64> list = new List<Int64>();
+
+            List<long> arr = reader.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt64(arrTemp)).ToList();
+
+
+            CountTripletsSample sample = new CountTripletsSample() { arr = arr, r = r };
+            //sample.seq = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp));
+            Samples.Add(sample);
+        }
+
+        public override void CreateAnswers(StreamReader reader)
+        {
+            CountTripletsAnswer ans = new CountTripletsAnswer() { res = Convert.ToInt64(reader.ReadLine()) };
+            Answers.Add(ans);
+        }
+
+
+
+        public override void AddManualSamples()
+        {
             Samples.Add(new CountTripletsSample() { arr = new List<long> { 1, 2, 4, 6, 3,8,6,12,24,24 }, r = 2 });
             Answers.Add(new CountTripletsAnswer() { res = 7 });
 
-            LoadSamples();
+            
             Samples.Add(new CountTripletsSample() { arr = new List<long> { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, r = 1 });
             Answers.Add(new CountTripletsAnswer() { res = 161700 });
 
@@ -149,7 +140,7 @@ namespace HackerRank
             return new CountTripletsAnswer() { res = res };
         }
 
-        [SolutionMethod]
+        //[SolutionMethod]
         public CountTripletsAnswer BruteForce2(CountTripletsSample sample)
         {
             Int64 r = sample.r;
@@ -349,8 +340,9 @@ namespace HackerRank
             return new CountTripletsAnswer() { res = res };
         }
         [SolutionMethod]
-        public CountTripletsAnswer BruteForce4(CountTripletsSample sample)
+        public TAnswer BruteForce4(TSample Sample)
         {
+            CountTripletsSample sample = Sample as CountTripletsSample;
             Int64 r = sample.r;
             List<Int64> arr = sample.arr;
             Int64 res = 0;

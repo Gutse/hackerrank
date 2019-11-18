@@ -9,7 +9,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class sherlockAndAnagramsSample
+    public class sherlockAndAnagramsSample: TSample
     {
         public String s;
         public override string ToString()
@@ -18,34 +18,25 @@ namespace HackerRank
         }
     }
 
-    public class sherlockAndAnagramsAnswer
+    public class sherlockAndAnagramsAnswer: TAnswer
     {
         public Int32 result;
         public override string ToString()
         {
             return result.ToString();
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
+        }
+        public override Boolean Equals(Object obj)
+        {
+            return (obj as sherlockAndAnagramsAnswer)?.result == this.result;
         }
     }
 
 
-    class sherlockAndAnagrams : TProblem<sherlockAndAnagramsSample, sherlockAndAnagramsAnswer>
+    class sherlockAndAnagrams : TProblem
     {
-        private Random rnd = new Random();
 
 
-        public override void GenSamples()
+        public override void AddManualSamples()
         {
             Samples.Add(new sherlockAndAnagramsSample() {s = "abba" });
             Answers.Add(new sherlockAndAnagramsAnswer() { result = 4 });
@@ -64,7 +55,8 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public sherlockAndAnagramsAnswer DP(sherlockAndAnagramsSample sample) {
+        public TAnswer DP(TSample Sample) {
+            sherlockAndAnagramsSample sample = Sample as sherlockAndAnagramsSample;
             String s = sample.s;
 
             Int32 result = 0;
@@ -148,8 +140,9 @@ namespace HackerRank
 
 
         [SolutionMethod]
-        public sherlockAndAnagramsAnswer BF(sherlockAndAnagramsSample sample)
+        public TAnswer BF(TSample Sample)
         {
+            sherlockAndAnagramsSample sample = Sample as sherlockAndAnagramsSample;
             String s = sample.s;
 
             //HashSet<String> Subs = new HashSet<string>();
@@ -176,27 +169,7 @@ namespace HackerRank
 
             return new sherlockAndAnagramsAnswer() { result = result };
         }
-        public override bool CheckAnswer(int SampleID, sherlockAndAnagramsAnswer Answer)
-        {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.result == Answers?[SampleID]?.result;
-            /*
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < Answer.arr.Length; i++)
-            {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
-                {
-                    return false;
-                }
-            }
-
-            return true; 
-             */
-        }
+       
 
 
     }

@@ -8,39 +8,53 @@ using System.Text;
 
 namespace HackerRank
 {
-
-    class PrimeXOR : TProblem<Int32[], Int32>
+    public class PrimeXORSample : TSample
     {
-        private Random rnd;
-
-        public PrimeXOR()
+        public Int32[] a;
+        public override string ToString()
         {
-            rnd = new Random();
-            Solution s1 = new Solution(Solution1);
-            Solution s2 = new Solution(Solution2);
-            Solutions.Add(s1);
-            Solutions.Add(s2);
+            return base.ToString();
+        }
+    }
+
+    public class PrimeXORAnswer : TAnswer
+    {
+        public Int32 result;
+        public override string ToString()
+        {
+            return base.ToString();
         }
 
-        public override void GenSamples()
+        public override Boolean Equals(Object obj)
         {
-            /*
-            Samples.Add(new Int32[] { 3511, 3671, 4153 });
-            Answers.Add(4);
+            return (obj as PrimeXORAnswer)?.result == this.result;
+        }
+        public override Int32 GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 
-            Samples.Add(new Int32[] { 3511, 3511, 3511, 3511, 3511 });
-            Answers.Add(3);
+    class PrimeXOR : TProblem
+    {
+
+        public override void AddManualSamples()
+        {
+            Samples.Add(new PrimeXORSample() { a = new Int32[] { 3511, 3671, 4153 } });
+            Answers.Add(new PrimeXORAnswer() { result = 4 });
+
+            Samples.Add(new PrimeXORSample() { a = new Int32[] { 3511, 3511, 3511, 3511, 3511 } });
+            Answers.Add(new PrimeXORAnswer() { result = 3 });
 
 
-            Samples.Add(new Int32[] { 3511, 3511, 3511, 3511 });
-            Answers.Add(2);
+            Samples.Add(new PrimeXORSample() { a = new Int32[] { 3511, 3511, 3511, 3511 } });
+            Answers.Add(new PrimeXORAnswer() { result = 2 });
 
-            Samples.Add(new Int32[] { 3,3,3,3,5,5,5,5 });
-            Answers.Add(12);
-            */
-            Samples.Add(new Int32[] { 3517, 4186, 4156, 3822, 4102, 3696, 3528, 3800, 3803, 3931, 3850, 3734, 3788, 4069, 3873, 4082, 4146, 4004, 3862, 3544, 3634, 3948, 3747, 4204, 3635, 4142, 3713, 3988, 3733, 3625, 4194, 3742, 3741, 3713, 3812, 3757, 4170, 4192, 4006, 4037, 3754, 3633, 4160, 4146, 3824, 3509, 3884, 3545, 3956, 4134, 3943, 3598, 4031, 4170, 4020, 3697, 3918, 3521, 4015, 3607, 3652, 3987, 3947, 3601, 3987, 3518, 4031, 3919, 4134, 3991, 3602, 4076, 3543, 3987, 3824, 3564, 4124, 3669, 3706, 3854, 3736, 4027, 4064, 4169, 3605, 3568, 3999, 3670, 3892, 4085, 4110, 4125, 3708, 4054, 4076, 3910, 3755 });
-            Answers.Add(536823984);
+            Samples.Add(new PrimeXORSample() { a = new Int32[] { 3,3,3,3,5,5,5,5 } });
+            Answers.Add(new PrimeXORAnswer() { result = 12 });
 
+            Samples.Add(new PrimeXORSample() { a = new Int32[] { 3517, 4186, 4156, 3822, 4102, 3696, 3528, 3800, 3803, 3931, 3850, 3734, 3788, 4069, 3873, 4082, 4146, 4004, 3862, 3544, 3634, 3948, 3747, 4204, 3635, 4142, 3713, 3988, 3733, 3625, 4194, 3742, 3741, 3713, 3812, 3757, 4170, 4192, 4006, 4037, 3754, 3633, 4160, 4146, 3824, 3509, 3884, 3545, 3956, 4134, 3943, 3598, 4031, 4170, 4020, 3697, 3918, 3521, 4015, 3607, 3652, 3987, 3947, 3601, 3987, 3518, 4031, 3919, 4134, 3991, 3602, 4076, 3543, 3987, 3824, 3564, 4124, 3669, 3706, 3854, 3736, 4027, 4064, 4169, 3605, 3568, 3999, 3670, 3892, 4085, 4110, 4125, 3708, 4054, 4076, 3910, 3755 } });
+            Answers.Add(new PrimeXORAnswer() { result = 536823984 });
 
         }
 
@@ -57,9 +71,6 @@ namespace HackerRank
                 sqrts.Add(c * c, c);
                 c++;
             }
-
-
-
             result.Add(2);
             result.Add(3);
             for (int i = 4; i < n; i++)
@@ -203,11 +214,11 @@ namespace HackerRank
 
 
 
-
-        public static Int32 Solution2(Int32[] sample)
+        [SolutionMethod]
+        public TAnswer Solution2(TSample Sample)
         {
             
-            Int32[] a = sample;
+            Int32[] a = (Sample as PrimeXORSample).a;
             Int32 modulus = 1000000007;
 
 
@@ -257,7 +268,7 @@ namespace HackerRank
                 }
             }
 
-            return (Int32)count;
+            return new PrimeXORAnswer() { result = (Int32) count};
 
         }
 

@@ -9,7 +9,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class PowerSumSample
+    public class PowerSumSample: TSample
     {
         public Int32 X;
         public Int32 N;
@@ -19,22 +19,27 @@ namespace HackerRank
         }
     }
 
-    public class PowerSumAnswer
+    public class PowerSumAnswer: TAnswer
     {
         public Int32 ps;
         public override string ToString()
         {
             return ps.ToString();
         }
+        public override Boolean Equals(Object obj)
+        {
+            return (obj as PowerSumAnswer)?.ps == this.ps;
+
+            
+        }
     }
 
 
-    class PowerSum : TProblem<PowerSumSample, PowerSumAnswer>
+    class PowerSum : TProblem
     {
-        private Random rnd = new Random();
 
 
-        public override void GenSamples()
+        public override void AddManualSamples()
         {
 
             
@@ -149,14 +154,11 @@ namespace HackerRank
             return result;
         }
 
-        public override bool CheckAnswer(int SampleID, PowerSumAnswer Answer)
-        {
-            return Answers[SampleID].ps == Answer.ps;
-        }
+       
         [SolutionMethod]
-        public PowerSumAnswer DP(PowerSumSample sample)
+        public TAnswer DP(TSample Sample)
         {
-
+            PowerSumSample sample = Sample as PowerSumSample;
             Int32 N = sample.N;
             Int32 X = sample.X;
 

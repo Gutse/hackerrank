@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class AlmostSortedSample
+    public class AlmostSortedSample: TSample
     {
         public Int32[] arr;
         public override string ToString()
@@ -18,66 +19,61 @@ namespace HackerRank
         }
     }
 
-    public class AlmostSortedAnswer
+    public class AlmostSortedAnswer : TAnswer
     {
         public String Verdict;
         public String Answer;
+        public override Boolean Equals(Object obj)
+        {
+            AlmostSortedAnswer ans = obj as AlmostSortedAnswer;
+            return ans?.Answer == this.Answer && ans?.Verdict == this.Verdict;
+        }
         public override string ToString()
         {
             return $"{Verdict} {Answer}";
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
         }
+
     }
 
 
-    class AlmostSorted : TProblem<AlmostSortedSample, AlmostSortedAnswer>
+    class AlmostSorted : TProblem
     {
-        private Random rnd = new Random();
-
-
-        public override void GenSamples()
+        public override void CreateSamples(StreamReader reader)
         {
+            int n = Convert.ToInt32(reader.ReadLine());
 
+            int[] arr = Array.ConvertAll(reader.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
 
-            //            Samples.Add(new AlmostSortedSample() {arr = new Int32[] { 4 , 2 } });
-            //Answers.Add(new AlmostSortedAnswer() { Verdict = "yes", Answer = "swap 1 2" });
+            Samples.Add(new AlmostSortedSample() { arr = arr});
+        }
 
-            //Samples.Add(new AlmostSortedSample() { arr = new Int32[] { 3 ,1, 2 } });
-            //Answers.Add(new AlmostSortedAnswer() { Verdict = "no", Answer = "" });
-
-            Samples.Add(new AlmostSortedSample() { arr = new Int32[] { 3 ,2, 1 } });
-            Answers.Add(new AlmostSortedAnswer() { Verdict = "yes", Answer = "" });
-
-
-            Samples.Add(new AlmostSortedSample() { arr = new Int32[] { 1, 5, 4, 3, 2, 6 } });
-            Answers.Add(new AlmostSortedAnswer() { Verdict = "yes", Answer = "reverse 2 5" });
-
+        public override void CreateAnswers(StreamReader reader)
+        {
+            String verdict = reader.ReadLine();
+            String answer = reader.ReadLine();
+            if (answer == null)
+            {
+                answer = "";
+            }
             
-
-
-            //Samples.Add(new AlmostSortedSample() { arr = new Int32[] { 1, 2, 4, 3, 5, 6 } });
-            //Answers.Add(new AlmostSortedAnswer() { Verdict = "yes", Answer = "swap 3 4" });
-
-            //Samples.Add(new AlmostSortedSample() { arr = new Int32[] { 4104, 8529, 49984, 54956, 63034, 82534, 84473, 86411, 92941, 95929, 108831, 894947, 125082, 137123, 137276, 142534, 149840, 154703, 174744, 180537, 207563, 221088, 223069, 231982, 249517, 252211, 255192, 260283, 261543, 262406, 270616, 274600, 274709, 283838, 289532, 295589, 310856, 314991, 322201, 339198, 343271, 383392, 385869, 389367, 403468, 441925, 444543, 454300, 455366, 469896, 478627, 479055, 484516, 499114, 512738, 543943, 552836, 560153, 578730, 579688, 591631, 594436, 606033, 613146, 621500, 627475, 631582, 643754, 658309, 666435, 667186, 671190, 674741, 685292, 702340, 705383, 722375, 722776, 726812, 748441, 790023, 795574, 797416, 813164, 813248, 827778, 839998, 843708, 851728, 857147, 860454, 861956, 864994, 868755, 116375, 911042, 912634, 914500, 920825, 979477 } });
-            //Answers.Add(new AlmostSortedAnswer() { Verdict = "yes", Answer = "swap 12 95" });
-
+            Answers.Add(new AlmostSortedAnswer() { Answer = answer , Verdict = verdict});
 
         }
 
-        //[SolutionMethod]
-        public AlmostSortedAnswer BruteForce(AlmostSortedSample sample)
+        public override void AddManualSamples()
         {
+        }
+
+        public override void TargetedSamples()
+        {
+
+        }
+
+        [SolutionMethod]
+        public TAnswer BruteForce(TSample Sample)
+        {
+            AlmostSortedSample sample = Sample as AlmostSortedSample;
+
             Int32[] arr = sample.arr;
 
             if (arr.Length == 1)
@@ -196,55 +192,6 @@ namespace HackerRank
             {
                 return new AlmostSortedAnswer() { Verdict = "yes", Answer = $"reverse {pop[0] + 1} {pop[pop.Count - 1] + 2}" };
             }
-            return new AlmostSortedAnswer() { Verdict = "no", Answer = "" };
-
-        }
-
-        public override bool CheckAnswer(int SampleID, AlmostSortedAnswer Answer)
-        {
-            return Answer?.Verdict == Answers?[SampleID]?.Verdict && Answer?.Answer == Answers?[SampleID]?.Answer;
-            /*
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < Answer.arr.Length; i++)
-            {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
-                {
-                    return false;
-                }
-            }
-
-            return true; 
-             */
-        }
-
-        [SolutionMethod]
-        public AlmostSortedAnswer Solution2(AlmostSortedSample sample)
-        {
-            Int32[] arr = sample.arr;
-            String s = "aba";
-            Int64 n = 10;
-            Int32[] a = new Int32[4] { 1, 2, 3, 4 };
-            Int32 d = 17;
-            Int32 r = d - a.Length * (d / a.Length);
-
-            Int32 ACountInFull = 0;
-            foreach (var ch in s)
-            {
-                if (ch == 'a') { ACountInFull++; }
-            }
-            long FullTimes = n / s.Length;
-            long result = FullTimes + ACountInFull;
-            long Remain = n - FullTimes * s.Length;
-            for (int i = 0; i < Remain; i++)
-            {
-                if (s[i] == 'a') { result++; }
-            }
-            
-
             return new AlmostSortedAnswer() { Verdict = "no", Answer = "" };
 
         }

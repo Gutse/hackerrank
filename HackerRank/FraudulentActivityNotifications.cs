@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,17 +10,13 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class FraudulentActivityNotificationsSample
+    public class FraudulentActivityNotificationsSample : TSample
     {
         public Int32[] ex;
         public Int32 d;
-        public override string ToString()
-        {
-            return base.ToString();
-        }
     }
 
-    public class FraudulentActivityNotificationsAnswer
+    public class FraudulentActivityNotificationsAnswer : TAnswer
     {
         public Int32 result;
         public override string ToString()
@@ -38,106 +35,46 @@ namespace HackerRank
             return SB.ToString().Trim();
             */
         }
+        public override Boolean Equals(Object obj)
+        {
+            return (obj as FraudulentActivityNotificationsAnswer)?.result == this.result;
+            //return base.Equals(obj);
+        }
     }
 
 
-    class FraudulentActivityNotifications : TProblem<FraudulentActivityNotificationsSample, FraudulentActivityNotificationsAnswer>
+    class FraudulentActivityNotifications : TProblem
     {
-        private Random rnd = new Random();
 
-        public override bool CheckAnswer(int SampleID, FraudulentActivityNotificationsAnswer Answer)
+
+        public override void CreateSamples(StreamReader reader)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.result == Answers?[SampleID]?.result;
-            /*
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
-            {
-                return false;
-            }
+            string[] nm = reader.ReadLine().Split(' ');
+            Int32 n = Convert.ToInt32(nm[0]);
+            Int32 r = Convert.ToInt32(nm[1]);
 
-            for (int i = 0; i < Answer.arr.Length; i++)
-            {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
-                {
-                    return false;
-                }
-            }
+            FraudulentActivityNotificationsSample sample = new FraudulentActivityNotificationsSample() { };
+            sample.d = r;
+            sample.ex = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt32(sTemp));
 
-            return true; 
-             */
-        }
-        private void LoadSamples(String opt, String opt2 = "")
-        {
-            void LoadFile(String InputFile, String OutputFile)
-            {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile))
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    string[] nm = reader.ReadLine().Split(' ');
-                    Int32 n = Convert.ToInt32(nm[0]);
-                    Int32 r = Convert.ToInt32(nm[1]);
-
-                    //List<long> arr = reader.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt64(arrTemp)).ToList();
-
-
-                    FraudulentActivityNotificationsSample sample = new FraudulentActivityNotificationsSample() { };
-                    sample.d = r;
-                    sample.ex = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt32(sTemp));
-
-                    Samples.Add(sample);
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    FraudulentActivityNotificationsAnswer ans = new FraudulentActivityNotificationsAnswer() { };
-                    Int32.TryParse(reader.ReadLine(), out ans.result);
-                    Answers.Add(ans);
-                }
-            }
-
-
-
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
-            }
+            Samples.Add(sample);
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(StreamReader reader)
+        {
+            FraudulentActivityNotificationsAnswer ans = new FraudulentActivityNotificationsAnswer() { };
+            Int32.TryParse(reader.ReadLine(), out ans.result);
+            Answers.Add(ans);
+
+        }
+
+        public override void AddManualSamples()
         {
             Samples.Add(new FraudulentActivityNotificationsSample() { d = 5, ex = new Int32[] { 6, 4, 5, 3, 7, 3, 9, 10, 11 } });
             Answers.Add(new FraudulentActivityNotificationsAnswer() { result = 2 });
-            LoadSamples("All");
         }
+        
+        
 
         //[SolutionMethod]
         public FraudulentActivityNotificationsAnswer BruteForce(FraudulentActivityNotificationsSample sample)
@@ -801,10 +738,11 @@ namespace HackerRank
 
        
        [SolutionMethod]
-        public FraudulentActivityNotificationsAnswer csort(FraudulentActivityNotificationsSample sample)
+        public TAnswer csort(TSample sample)
         {
-            Int32 d = sample.d;
-            int[] ex = sample.ex;
+            FraudulentActivityNotificationsSample ts = sample as FraudulentActivityNotificationsSample;
+            Int32 d = ts.d;
+            int[] ex = ts.ex;
 
             
 

@@ -9,7 +9,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class ReverseShuffleMergeSample
+    public class ReverseShuffleMergeSample : TSample
     {
         public String s;
         public override string ToString()
@@ -18,36 +18,17 @@ namespace HackerRank
         }
     }
 
-    public class ReverseShuffleMergeAnswer
+    public class ReverseShuffleMergeAnswer: TAnswer
     {
         public String result;
         public override string ToString()
         {
             return result;
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
         }
-    }
-
-
-    class ReverseShuffleMerge : TProblem<ReverseShuffleMergeSample, ReverseShuffleMergeAnswer>
-    {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, ReverseShuffleMergeAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
+            return (obj as ReverseShuffleMergeAnswer)?.result == this.result;
 
-            return Answer?.result == Answers?[SampleID]?.result;
             /*
              if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
             {
@@ -61,75 +42,39 @@ namespace HackerRank
                     return false;
                 }
             }
-
-            return true; 
-             */
-        }
-        private void LoadSamples(String opt, String opt2 = "")
-        {
-            void LoadFile(String InputFile, String OutputFile)
-            {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile))
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    ReverseShuffleMergeSample sample = new ReverseShuffleMergeSample() { s = reader.ReadLine() };
-                    Samples.Add(sample);
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    ReverseShuffleMergeAnswer ans = new ReverseShuffleMergeAnswer() { result = reader.ReadLine() };
-                    Answers.Add(ans);
-                }
-            }
-
-
-
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
-            }
+            */
         }
 
-        public override void GenSamples()
+    }
+
+
+    class ReverseShuffleMerge : TProblem
+    {
+        private Random rnd = new Random();
+
+        public override void CreateSamples(System.IO.StreamReader reader)
         {
-            LoadSamples("All");
+            ReverseShuffleMergeSample sample = new ReverseShuffleMergeSample() { s = reader.ReadLine() };
+            Samples.Add(sample);
+        }
+
+        public override void CreateAnswers(System.IO.StreamReader reader)
+        {
+            ReverseShuffleMergeAnswer ans = new ReverseShuffleMergeAnswer() { result = reader.ReadLine() };
+            Answers.Add(ans);
+
+        }
+
+        public override void AddManualSamples()
+        {
             Samples.Add(new ReverseShuffleMergeSample() { s = "caaabaddbc" });
             Answers.Add(new ReverseShuffleMergeAnswer() { result = "bdaac" });
         }
 
         [SolutionMethod]
-        public ReverseShuffleMergeAnswer BF(ReverseShuffleMergeSample sample)
+        public TAnswer BF(TSample Sample)
         {
+            ReverseShuffleMergeSample sample = Sample as ReverseShuffleMergeSample;
             String s = sample.s;
 
             char[] result = new Char[s.Length / 2];
@@ -252,14 +197,7 @@ namespace HackerRank
             return new ReverseShuffleMergeAnswer() { result = new string(result) };
         }
 
-        //[SolutionMethod]
-        public ReverseShuffleMergeAnswer stub(ReverseShuffleMergeSample sample)
-        {
-            String s = sample.s;
-            String result = "";
-
-            return new ReverseShuffleMergeAnswer() { result = result };
-        }
+        
 
 
     }

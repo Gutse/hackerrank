@@ -9,7 +9,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class IceCreamParlorSample
+    public class IceCreamParlorSample : TSample
     {
         public Int32[] cost;
         public Int32 money;
@@ -19,13 +19,13 @@ namespace HackerRank
         }
     }
 
-    public class IceCreamParlorAnswer
+    public class IceCreamParlorAnswer : TAnswer
     {
         public Int32[] arr;
         public override string ToString()
         {
-            
-            
+
+
             if (arr == null)
             {
                 return "[]";
@@ -36,113 +36,66 @@ namespace HackerRank
                 SB.Append($"{item} ");
             }
             return SB.ToString().Trim();
-            
+
         }
-    }
 
-
-    class IceCreamParlor : TProblem<IceCreamParlorSample, IceCreamParlorAnswer>
-    {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, IceCreamParlorAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            //return Answer?.result == Answers?[SampleID]?.result;
-            
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
+            IceCreamParlorAnswer Answer = obj as IceCreamParlorAnswer;
+
+            if (Answer?.arr?.Length != arr?.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i < Answer.arr?.Length; i++)
+            for (int i = 0; i < Answer.arr.Length; i++)
             {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
+                if (Answer.arr[i] != arr[i])
                 {
                     return false;
                 }
             }
 
-            return true; 
-            
+            return true;
         }
-        private void LoadSamples(String opt, String opt2 = "")
+    }
+
+
+    class IceCreamParlor : TProblem
+    {
+        private Random rnd = new Random();
+
+        public override void CreateSamples(System.IO.StreamReader reader)
         {
-            void LoadFile(String InputFile, String OutputFile) {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile)  )
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
+            int t = Convert.ToInt32(reader.ReadLine());
 
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    int t = Convert.ToInt32(reader.ReadLine());
-
-                    for (int tItr = 0; tItr < t; tItr++)
-                    {
-                        int money = Convert.ToInt32(reader.ReadLine());
-
-                        int n = Convert.ToInt32(reader.ReadLine());
-
-                        int[] cost = Array.ConvertAll(reader.ReadLine().Trim().Split(' '), costTemp => Convert.ToInt32(costTemp));
-
-                        IceCreamParlorSample sample = new IceCreamParlorSample() { cost = cost, money = money };
-                        Samples.Add(sample);
-
-                    }
-
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        int[] res = Array.ConvertAll(reader.ReadLine().Trim().Split(' '), costTemp => Convert.ToInt32(costTemp));
-
-                        IceCreamParlorAnswer ans = new IceCreamParlorAnswer() { arr = res };
-                        Answers.Add(ans);
-
-                    }
-                }
-            }
-
-
-            
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
+            for (int tItr = 0; tItr < t; tItr++)
             {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
+                int money = Convert.ToInt32(reader.ReadLine());
 
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
+                int n = Convert.ToInt32(reader.ReadLine());
 
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
+                int[] cost = Array.ConvertAll(reader.ReadLine().Trim().Split(' '), costTemp => Convert.ToInt32(costTemp));
+
+                IceCreamParlorSample sample = new IceCreamParlorSample() { cost = cost, money = money };
+                Samples.Add(sample);
+
             }
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(System.IO.StreamReader reader)
         {
-            LoadSamples("All");
+            while (!reader.EndOfStream)
+            {
+                int[] res = Array.ConvertAll(reader.ReadLine().Trim().Split(' '), costTemp => Convert.ToInt32(costTemp));
+
+                IceCreamParlorAnswer ans = new IceCreamParlorAnswer() { arr = res };
+                Answers.Add(ans);
+
+            }
         }
+
+        
         static void swap(Int32[] arr, Int32 index1, Int32 index2, Int32[] idx)
         {
             Int32 temp = arr[index1];
@@ -215,7 +168,9 @@ namespace HackerRank
             while (left < right);
         }
         [SolutionMethod]
-        public IceCreamParlorAnswer BruteForce(IceCreamParlorSample sample) {
+        public TAnswer BruteForce(TSample Sample)
+        {
+            IceCreamParlorSample sample = Sample as IceCreamParlorSample;
             Int32[] cost = sample.cost;
             Int32 money = sample.money;
             Int32[] result = new Int32[2];
@@ -244,22 +199,14 @@ namespace HackerRank
                     {
                         //Console.WriteLine($"{cost[j]} {cost[i]} ");
                         //Console.WriteLine($"{Math.Min(idx[i], idx[j])} {Math.Max(idx[i], idx[j])}");
-                        return new IceCreamParlorAnswer() { arr = new Int32[] { Math.Min(idx[i], idx[j]) , Math.Max(idx[i], idx[j]) } };
+                        return new IceCreamParlorAnswer() { arr = new Int32[] { Math.Min(idx[i], idx[j]), Math.Max(idx[i], idx[j]) } };
                     }
                 }
             }
             return new IceCreamParlorAnswer() { arr = result };
         }
 
-        //[SolutionMethod]
-        public IceCreamParlorAnswer stub(IceCreamParlorSample sample)
-        {
-            Int32[] cost = sample.cost;
-            Int32 money = sample.money;
-            Int32[] result = new Int32[2];
-
-            return new IceCreamParlorAnswer() { arr = result };
-        }
+       
 
     }
 }

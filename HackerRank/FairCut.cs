@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,126 +10,84 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class FairCutSample
+    public class FairCutSample : TSample
     {
-        public Int32[] arr;
-        public Int32 k;
+        public Int64[] arr;
+        public Int64 k;
     }
 
-
-
-    class FairCut : TProblem<FairCutSample, Int32>
+    public class FairCutAnswer : TAnswer
     {
-        private Random rnd = new Random();
-
-
-        public override void GenSamples()
+        public Int64 result;
+        public override string ToString()
         {
-
-           
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 4, 3, 1, 2 }, k = 2 });
-            Answers.Add(6);
-            
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 3, 3, 3, 1 }, k = 1 });
-            Answers.Add(2);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 3, 3, 3, 1 }, k = 1 });
-            Answers.Add(2);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 63, 79, 37, 21, 26, 5 }, k = 2 });
-            Answers.Add(232);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 0, 95, 99, 16 }, k = 2 });
-            Answers.Add(198);
-            
-
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 28, 12, 56, 6, 33 }, k = 3 });
-            Answers.Add(121);
-
-           
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 35, 51, 31, 31, 24, 98 }, k = 1 });
-            Answers.Add(98);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 26, 21, 99, 70, 95, 14, 77 }, k = 2 });
-            Answers.Add(369);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 46, 99, 35, 75, 4 }, k = 3 });
-            Answers.Add(230);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 11, 98, 39, 48, 19 }, k = 1 });
-            Answers.Add(116);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 91, 17, 30, 27, 27 }, k = 1 });
-            Answers.Add(77);
-            
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 2, 7, 29, 9 }, k = 3 });
-            Answers.Add(29);
-            
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 99, 45, 32, 64, 50, 83 }, k = 3 });
-            Answers.Add(253);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 33, 15, 45, 31, 11, 19, 19 }, k = 2 });
-            Answers.Add(116);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 33, 16, 94, 94, 8 }, k = 2 });
-            Answers.Add(250);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 86, 50, 23, 79, 43, 92 }, k = 2 });
-            Answers.Add(224);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 30, 64, 13, 65 }, k = 2 });
-            Answers.Add(104);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 97, 35, 45, 66, 58, 1 }, k = 3 });
-            Answers.Add(332);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 15, 86, 70, 77, 48, 96, 92 }, k = 3 });
-            Answers.Add(347);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 91, 92, 67, 77, 0, 60, 6 }, k = 3 });
-            Answers.Add(463);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 10, 79, 0, 47 }, k = 2 });
-            Answers.Add(158);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 59, 83, 35, 80 }, k = 2 });
-            Answers.Add(96);
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 50, 52, 81, 90, 34 }, k = 1 });
-            Answers.Add(87);
+            return base.ToString();
             /*
-            Samples.Add(new FairCutSample() { arr = new Int32[] { 691259308, 801371251, 345390019 ,162749471, 998969126, 308205008, 430442891 ,404642721, 532566673, 266540863, 702197285, 749105392, 775025448, 20453591, 582291534 ,132855413, 747557193, 129094259, 474372133, 788391070 }, k = 11 });
-            Answers.Add(30481712493);
-            
+            if (arr == null)
+            {
+                return "[]";
+            }
+            StringBuilder SB = new StringBuilder();
+            foreach (var item in arr)
+            {
+                SB.Append($"{item} ");
+            }
+            return SB.ToString().Trim();
             */
-            //CreateSamples();
-
         }
 
-
-        public void CreateSamples()
+        public override Boolean Equals(Object obj)
         {
+            return (obj as FairCutAnswer)?.result == this.result;
 
-            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(@"D:\hackerrank\faircutsamples.txt"))
+            /*
+             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
             {
-
-
-                for (int i = 0; i < 20; i++)
-                {
-                    Int32 SampleLenght = rnd.Next(4) + 4;
-                    Int32 SampleK = rnd.Next(3) + 1;
-                    Int32[] SampleArr = new Int32[SampleLenght];
-
-                    for (int j = 0; j < SampleLenght; j++)
-                    {
-                        SampleArr[j] = rnd.Next(100);
-                    }
-
-                    FairCutSample sample = new FairCutSample() { arr = SampleArr, k = SampleK };
-                    Int32 SampleAnswer = Straight(sample);
-
-                    writer.Write("Samples.Add(new FairCutSample() { arr = new Int32[] {");
-                    for (int j = 0; j < SampleArr.Length - 1; j++)
-                    {
-                        writer.Write($"{SampleArr[j]}, ");
-                    }
-                    writer.Write($"{SampleArr[SampleArr.Length - 1]}");
-
-                    writer.Write("}, k = ");
-                    writer.Write($"{SampleK}");
-                    writer.WriteLine("});");
-                    writer.WriteLine($"Answers.Add({SampleAnswer});");
-
-                }
+                return false;
             }
 
+            for (int i = 0; i < Answer.arr.Length; i++)
+            {
+                if (Answer.arr[i] != Answers[SampleID].arr[i])
+                {
+                    return false;
+                }
+            }
+            */
+        }
+       
+    }
 
+    class FairCut : TProblem
+    {
+
+
+        public override void CreateSamples(StreamReader reader)
+        {
+            string[] nk = reader.ReadLine().Split(' ');
+
+            Int64 n = Convert.ToInt64(nk[0]);
+
+            Int64 k = Convert.ToInt64(nk[1]);
+
+            Int64[] arr = Array.ConvertAll(reader.ReadLine().Split(' '), arrTemp => Convert.ToInt64(arrTemp));
+
+            Samples.Add(new FairCutSample() { arr = arr, k = k});
         }
 
-        public static void PrintDP(Int32[,] dp, Int32[] arr)
+        public override void CreateAnswers(StreamReader reader)
+        {
+            FairCutAnswer ans = new FairCutAnswer() { };
+            Int64.TryParse(reader.ReadLine(), out ans.result);
+            Answers.Add(ans);
+        }
+
+
+
+
+
+
+        public static void PrintDP(Int64[,] dp, Int64[] arr)
         {
             Console.Write("    ");
             for (int i = 0; i < arr.Length; i++)
@@ -156,15 +115,17 @@ namespace HackerRank
         }
 
         //[SolutionMethod]
-        public Int32 Solution1(FairCutSample sample)
+        public FairCutAnswer Solution1(TSample Sample)
         {
 
-            Int32[] arr = sample.arr;
-            Int32 k = sample.k;
+            FairCutSample sample = Sample as FairCutSample;
 
-            Array.Sort(arr, new Comparison<Int32>((x, y) => y.CompareTo(x)));
+            Int64[] arr = sample.arr;
+            Int64 k = sample.k;
 
-            Int32[,] Diffs = new Int32[arr.Length, arr.Length];
+            Array.Sort(arr, new Comparison<Int64>((x, y) => y.CompareTo(x)));
+
+            Int64[,] Diffs = new Int64[arr.Length, arr.Length];
             for (int i = 0; i < arr.Length; i++)
             {
                 for (int j = 0; j < arr.Length; j++)
@@ -175,8 +136,8 @@ namespace HackerRank
 
 
 
-            Int32[] Taken = new Int32[k];
-            Int32[] Remains = new Int32[arr.Length - k];
+            Int64[] Taken = new Int64[k];
+            Int64[] Remains = new Int64[arr.Length - k];
 
             for (int i = 0; i < k; i++)
             {
@@ -188,7 +149,7 @@ namespace HackerRank
                 Remains[i] = i + k;
             }
 
-            Int32 CurrentDiff = SetDiffs(Taken, Remains, Diffs);
+            Int64 CurrentDiff = SetDiffs(Taken, Remains, Diffs);
 
 
             for (int i = 0; i < k; i++)
@@ -196,11 +157,11 @@ namespace HackerRank
 
                 for (int j = 0; j < arr.Length - k; j++)
                 {
-                    Int32 t = Taken[i];
+                    Int64 t = Taken[i];
                     Taken[i] = Remains[j];
                     Remains[j] = t;
 
-                    Int32 NewDiff = SetDiffs(Taken, Remains, Diffs);
+                    Int64 NewDiff = SetDiffs(Taken, Remains, Diffs);
                     if (NewDiff >= CurrentDiff)
                     {
                         Remains[j] = t;
@@ -215,14 +176,14 @@ namespace HackerRank
             }
 
 
-            return CurrentDiff;
+            return new FairCutAnswer() { result = CurrentDiff };
 
         }
 
 
-        static Int32 SetDiffs(Int32[] Taken, Int32[] Remains, Int32[,] diffs)
+        static Int64 SetDiffs(Int64[] Taken, Int64[] Remains, Int64[,] diffs)
         {
-            Int32 res = 0;
+            Int64 res = 0;
             foreach (var t in Taken)
             {
                 foreach (var r in Remains)
@@ -233,9 +194,9 @@ namespace HackerRank
             }
             return res;
         }
-        static Int32 SetDiffs(List<Int32> Taken, List<Int32> Remains, Int32[,] diffs)
+        static Int64 SetDiffs(List<Int64> Taken, List<Int64> Remains, Int64[,] diffs)
         {
-            Int32 res = 0;
+            Int64 res = 0;
             foreach (var t in Taken)
             {
                 foreach (var r in Remains)
@@ -247,19 +208,19 @@ namespace HackerRank
             return res;
         }
 
-        [SolutionMethod]
-        public Int32 Straight(FairCutSample sample)
+        //[SolutionMethod]
+        public Int64 Straight(FairCutSample sample)
         {
 
-            Int32[] arr = sample.arr;
-            Int32 k = sample.k;
+            Int64[] arr = sample.arr;
+            Int64 k = sample.k;
 
 
 
-            return FCut(k, new List<Int32>(), arr.ToList());
+            return FCut(k, new List<Int64>(), arr.ToList());
         }
 
-        public Int32 FCut(Int32 k, List<Int32> left, List<Int32> right)
+        public Int64 FCut(Int64 k, List<Int64> left, List<Int64> right)
         {
 
 
@@ -269,15 +230,15 @@ namespace HackerRank
             }
 
 
-            Int32 MinCut = Int32.MaxValue;
+            Int64 MinCut = Int64.MaxValue;
             for (int i = 0; i < right.Count; i++)
             {
-                List<Int32> nl = new List<int>(left);
-                List<Int32> nr = new List<int>(right);
+                List<Int64> nl = new List<Int64>(left);
+                List<Int64> nr = new List<Int64>(right);
                 nl.Add(right[i]);
                 nr.RemoveAt(i);
 
-                Int32 X = FCut(k, nl, nr);
+                Int64 X = FCut(k, nl, nr);
                 if (nl.Count == k)
                 {
                     /*
@@ -289,7 +250,7 @@ namespace HackerRank
                     Console.WriteLine($") = {X}");
                     */
 
-                    
+
 
                 }
                 if (X < MinCut)
@@ -302,9 +263,9 @@ namespace HackerRank
             return MinCut;
         }
 
-        Int32 CountCut(List<Int32> left, List<Int32> right)
+        Int64 CountCut(List<Int64> left, List<Int64> right)
         {
-            Int32 res = 0;
+            Int64 res = 0;
             foreach (var li in left)
             {
                 foreach (var ri in right)
@@ -316,12 +277,12 @@ namespace HackerRank
         }
 
 
-        [SolutionMethod]
-        public Int32 Greedy(FairCutSample sample)
+        //[SolutionMethod]
+        public Int64 Greedy(FairCutSample sample)
         {
 
-            Int32[] arr = sample.arr;
-            Int32 k = sample.k;
+            Int64[] arr = sample.arr;
+            Int64 k = sample.k;
 
             if (k > (arr.Length / 2))
             {
@@ -332,7 +293,7 @@ namespace HackerRank
             Array.Sort(arr);
 
 
-            Int32[,] Diffs = new Int32[arr.Length, arr.Length];
+            Int64[,] Diffs = new Int64[arr.Length, arr.Length];
 
             for (int i = 0; i < arr.Length; i++)
             {
@@ -343,16 +304,16 @@ namespace HackerRank
             }
 
             /*
-            Int32 MassCenter = arr.Length / 2;
+            Int64 MassCenter = arr.Length / 2;
 
-            List<Int32> Taken = new List<int>() { MassCenter };
-            List<Int32> Remains = new List<int>();
+            List<Int64> Taken = new List<int>() { MassCenter };
+            List<Int64> Remains = new List<int>();
             bool[] takes = new bool[arr.Length];
             takes[MassCenter] = true;
-            Int32 distance = -2;
+            Int64 distance = -2;
             for (int i = 0; i < k; i++)
             {
-                Int32 toTake = Math.Min(MassCenter + distance, arr.Length-1);
+                Int64 toTake = Math.Min(MassCenter + distance, arr.Length-1);
                 Taken.Add(toTake);
                 takes[toTake] = true;
                 if (distance > 0)
@@ -380,7 +341,7 @@ namespace HackerRank
             }
 
 
-            Int32 d = SetDiffs(Taken, Remains, Diffs);
+            Int64 d = SetDiffs(Taken, Remains, Diffs);
             return d;*/
 
             Boolean[] takes = new Boolean[arr.Length];
@@ -389,9 +350,9 @@ namespace HackerRank
                 takes[i] = false;
             }
 
-            Int32 len01 = k * 2;
+            Int64 len01 = k * 2;
 
-            Int32 Start01 = (arr.Length - len01) / 2;
+            Int64 Start01 = (arr.Length - len01) / 2;
             Boolean take = false;
             for (int i = 0; i < k * 2; i++)
             {
@@ -399,8 +360,8 @@ namespace HackerRank
                 take = !take;
             }
 
-            List<Int32> Taken = new List<int>() ;
-            List<Int32> Remains = new List<int>();
+            List<Int64> Taken = new List<Int64>();
+            List<Int64> Remains = new List<Int64>();
 
             for (int i = 0; i < arr.Length; i++)
             {
@@ -408,18 +369,22 @@ namespace HackerRank
                 {
                     Taken.Add(i);
                 }
-                else {
+                else
+                {
                     Remains.Add(i);
                 }
             }
-            Int32 d = SetDiffs(Taken, Remains, Diffs);
+            Int64 d = SetDiffs(Taken, Remains, Diffs);
             return d;
         }
 
         [SolutionMethod]
-        public Int32 DP(FairCutSample sample) {
-            Int32[] arr = sample.arr;
-            Int32 k = sample.k;
+        public TAnswer DP(TSample Sample)
+        {
+            FairCutSample sample = Sample as FairCutSample;
+
+            Int64[] arr = sample.arr;
+            Int64 k = sample.k;
 
 
             /*
@@ -429,17 +394,17 @@ namespace HackerRank
             }
             */
 
-            Int32 n = arr.Length;
+            Int64 n = arr.Length;
 
             Array.Sort(arr);
 
-            Int32[,] dp = new Int32[arr.Length+1, arr.Length +1];
+            Int64[,] dp = new Int64[arr.Length + 1, arr.Length + 1];
 
-            for (int i = 0; i < arr.Length+1; i++)
+            for (int i = 0; i < arr.Length + 1; i++)
             {
-                for (int j = 0; j < arr.Length+1; j++)
+                for (int j = 0; j < arr.Length + 1; j++)
                 {
-                    dp[i, j] = Int32.MaxValue;
+                    dp[i, j] = Int64.MaxValue;
                 }
             }
 
@@ -448,27 +413,29 @@ namespace HackerRank
 
             for (int i = 0; i < arr.Length; i++)
             {
-                for (int j = 0; j < i+1; j++)
+                for (int j = 0; j < i + 1; j++)
                 {
 
-                    if ((j > k) || ((i - j) > (n - k))) {
+                    if ((j > k) || ((i - j) > (n - k)))
+                    {
                         continue;
                     }
-                    
 
 
-                    Int32 temp_li = dp[i, j] + arr[i] * (i - j - (n - k - (i - j)));
 
-                    Int32 temp_lu = dp[i, j] + arr[i] * (j - (k - j));
+                    Int64 temp_li = dp[i, j] + arr[i] * (i - j - (n - k - (i - j)));
 
-                    if (dp[i + 1, j + 1] > temp_li) {
-                        dp[i + 1,j + 1] = temp_li;
-                    }
-                    if (dp[i + 1,j] > temp_lu)
+                    Int64 temp_lu = dp[i, j] + arr[i] * (j - (k - j));
+
+                    if (dp[i + 1, j + 1] > temp_li)
                     {
-                        dp[i + 1,j] = temp_lu;
+                        dp[i + 1, j + 1] = temp_li;
                     }
-            
+                    if (dp[i + 1, j] > temp_lu)
+                    {
+                        dp[i + 1, j] = temp_lu;
+                    }
+
 
 
 
@@ -477,7 +444,7 @@ namespace HackerRank
 
 
 
-            return dp[n, k];
+            return new FairCutAnswer() { result = dp[n, k] };
         }
 
 

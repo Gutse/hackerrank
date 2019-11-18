@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class FrequencyQueriesSample
+    public class FrequencyQueriesSample: TSample
     {
         public List<List<int>> queries;
 
@@ -19,132 +20,65 @@ namespace HackerRank
         }
     }
 
-    public class FrequencyQueriesAnswer
+    public class FrequencyQueriesAnswer: TAnswer
     {
         public List<int> answer;
         public override string ToString()
         {
             return String.Join(" ", answer);
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
         }
-    }
-
-
-    class FrequencyQueries : TProblem<FrequencyQueriesSample, FrequencyQueriesAnswer>
-    {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, FrequencyQueriesAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            //return Answer?.result == Answers?[SampleID]?.result;
-
-            if (Answer?.answer?.Count != Answers?[SampleID]?.answer?.Count)
+            FrequencyQueriesAnswer Answer = obj as FrequencyQueriesAnswer;
+            
+            if (Answer?.answer?.Count != this.answer.Count)
             {
                 return false;
             }
 
             for (int i = 0; i < Answer.answer.Count; i++)
             {
-                if (Answer.answer[i] != Answers[SampleID].answer[i])
+                if (Answer.answer[i] != this.answer[i])
                 {
                     return false;
                 }
             }
-
             return true;
-
+            
         }
-        private void LoadSamples(String opt, String opt2 = "")
+    }
+
+
+    class FrequencyQueries : TProblem
+    {
+        public override void CreateSamples(StreamReader reader)
         {
-            void LoadFile(String InputFile, String OutputFile)
+            Int64 n = Convert.ToInt32(reader.ReadLine());
+            FrequencyQueriesSample sample = new FrequencyQueriesSample() { queries = new List<List<int>>() };
+            while (!reader.EndOfStream)
             {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile))
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    Int64 n = Convert.ToInt32(reader.ReadLine());
-                    FrequencyQueriesSample sample = new FrequencyQueriesSample() { queries = new List<List<int>>() };
-                    //reader.ReadToEnd().TrimEnd().Split('\n')
-                    while (!reader.EndOfStream)
-                    //for (int i = 0; i < n; i++)
-                    {
-                        List<int> arr = reader.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
-                        sample.queries.Add(arr);
-                    }
-                    Samples.Add(sample);
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    FrequencyQueriesAnswer ans = new FrequencyQueriesAnswer() { answer = new List<int>() };
-
-                    while (!reader.EndOfStream)
-                    {
-                        ans.answer.Add(Convert.ToInt32(reader.ReadLine()));
-                    }
-
-                    Answers.Add(ans);
-                }
+                List<int> arr = reader.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+                sample.queries.Add(arr);
             }
-
-
-
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
-            }
+            Samples.Add(sample);
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(StreamReader reader)
         {
-            LoadSamples("07");
-            //Samples.Add(new FrequencyQueriesSample() {queries = new List<List<int>>() });
-            //Answers.Add(new FrequencyQueriesAnswer() {answer = new List<int>()});
+            FrequencyQueriesAnswer ans = new FrequencyQueriesAnswer() { answer = new List<int>() };
+
+            while (!reader.EndOfStream)
+            {
+                ans.answer.Add(Convert.ToInt32(reader.ReadLine()));
+            }
+
+            Answers.Add(ans);
         }
 
         [SolutionMethod]
-        public FrequencyQueriesAnswer BruteForce(FrequencyQueriesSample sample)
+        public TAnswer BruteForce(TSample Sample)
         {
+            FrequencyQueriesSample sample = Sample as FrequencyQueriesSample;
             List<List<int>> queries = sample.queries;
 
             List<Int32> result = new List<int>();
@@ -219,8 +153,9 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public FrequencyQueriesAnswer TotalBruteForce(FrequencyQueriesSample sample)
+        public TAnswer TotalBruteForce(TSample Sample)
         {
+            FrequencyQueriesSample sample = Sample as FrequencyQueriesSample;
             List<List<int>> queries = sample.queries;
 
             List<Int32> result = new List<int>();

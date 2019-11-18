@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class TemplateProblemSample
+    public class TemplateProblemSample : TSample
     {
         public Int32[] arr;
         public Int32 k;
@@ -19,9 +20,10 @@ namespace HackerRank
         }
     }
 
-    public class TemplateProblemAnswer
+    public class TemplateProblemAnswer: TAnswer
     {
         public Int32[] arr;
+        public Int32 result;
         public override string ToString()
         {
             return base.ToString();
@@ -38,107 +40,75 @@ namespace HackerRank
             return SB.ToString().Trim();
             */
         }
-    }
 
-
-    class TemplateProblem : TProblem<TemplateProblemSample, TemplateProblemAnswer>
-    {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, TemplateProblemAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
-            return base.CheckAnswer(SampleID, Answer);
-            //return Answer?.result == Answers?[SampleID]?.result;
+            return (obj as TemplateProblemAnswer)?.result == this.result;
+
             /*
+             TemplateProblemAnswer Answer = obj as TemplateProblemAnswer;
              if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i < Answer.arr?.Length; i++)
+            for (int i = 0; i < Answer.arr.Length; i++)
             {
                 if (Answer.arr[i] != Answers[SampleID].arr[i])
                 {
                     return false;
                 }
             }
-
-            return true; 
-             */
+            */
         }
-        private void LoadSamples(String opt, String opt2 = "")
+        public override Int32 GetHashCode()
         {
-            void LoadFile(String InputFile, String OutputFile) {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile)  )
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    string[] nm = reader.ReadLine().Split(' ');
-                    Int64 n = Convert.ToInt32(nm[0]);
-                    Int64 r = Convert.ToInt32(nm[1]);
-
-                    //List<long> arr = reader.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt64(arrTemp)).ToList();
-                    //Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp));
-
-                    TemplateProblemSample sample = new TemplateProblemSample() { };
-                    Samples.Add(sample);
-                }
+            return base.GetHashCode();
+        }
+    }
 
 
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    TemplateProblemAnswer ans = new TemplateProblemAnswer() { };
-                    Answers.Add(ans);
-                }
-            }
+    class TemplateProblem : TProblem
+    {
+        public override void CreateSamples(System.IO.StreamReader reader)
+        {
+            string[] nm = reader.ReadLine().Split(' ');
+            Int32 n = Convert.ToInt32(nm[0]);
+            Int32 r = Convert.ToInt32(nm[1]);
 
+            TemplateProblemSample sample = new TemplateProblemSample() { };
+            /*
+            sample.d = r;
+            sample.ex = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt32(sTemp));
+            */
+            Samples.Add(sample);
+        }
 
+        public override void CreateAnswers(System.IO.StreamReader reader)
+        {
+            TemplateProblemAnswer ans = new TemplateProblemAnswer() { };
+            Int32.TryParse(reader.ReadLine(), out ans.result);
+            Answers.Add(ans);
+
+        }
+
+        public override void AddManualSamples()
+        {
+        }
+
+        public override void TargetedSamples()
+        {
             
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
-            }
-        }
-
-        public override void GenSamples()
-        {
-            LoadSamples("All");
-            //Samples.Add(new TemplateProblemSample() { });
-            //Answers.Add(new TemplateProblemAnswer() { });
         }
 
         [SolutionMethod]
-        public TemplateProblemAnswer BruteForce(TemplateProblemSample sample) {
-            return new TemplateProblemAnswer();
+        public TAnswer Stub(TSample Sample) {
+            TemplateProblemSample sample = Sample as TemplateProblemSample;
+
+            return new TemplateProblemAnswer() { };
         }
 
+        
 
     }
 }

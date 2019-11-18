@@ -9,14 +9,14 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class RKSumSample
+    public class RKSumSample: TSample
     {
         public Int64[] seq;
         public Int32 N;
         public Int32 K;
     }
 
-    public class RKSumAnswer
+    public class RKSumAnswer: TAnswer
     {
         public Int64[] a;
         public override string ToString()
@@ -28,67 +28,59 @@ namespace HackerRank
             }
             return SB.ToString().Trim();
         }
-
-    }
-
-
-    class RKSum : TProblem<RKSumSample, RKSumAnswer>
-    {
-        private Random rnd = new Random();
-        public override bool CheckAnswer(int SampleID, RKSumAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
-            if (Answer?.a?.Length != Answers?[SampleID]?.a?.Length)
+
+            RKSumAnswer Answer = obj as RKSumAnswer;
+             if (Answer?.a?.Length != a?.Length)
             {
                 return false;
             }
 
             for (int i = 0; i < Answer.a.Length; i++)
             {
-                if (Answer.a[i] != Answers[SampleID].a[i])
+                if (Answer.a[i] != a[i])
                 {
                     return false;
                 }
             }
-
             return true;
         }
 
-        private void LoadSamples()
+
+    }
+
+
+    class RKSum : TProblem
+    {
+        private Random rnd = new Random();
+        public override void CreateSamples(System.IO.StreamReader reader)
         {
             Int32 sq = 0;
-
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\input08.txt"))
-            //using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\RKSumInput"))
+            Int32.TryParse(reader.ReadLine(), out sq);
+            for (int i = 0; i < sq; i++)
             {
-                Int32.TryParse(reader.ReadLine(), out sq);
-                for (int i = 0; i < sq; i++)
-                {
-                    string[] nm = reader.ReadLine().Split(' ');
-                    RKSumSample sample = new RKSumSample() { N = Convert.ToInt32(nm[0]), K = Convert.ToInt32(nm[1]) };
-                    sample.seq = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp));
-                    Samples.Add(sample);
-                }
+                string[] nm = reader.ReadLine().Split(' ');
+                RKSumSample sample = new RKSumSample() { N = Convert.ToInt32(nm[0]), K = Convert.ToInt32(nm[1]) };
+                sample.seq = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp));
+                Samples.Add(sample);
             }
+        }
 
-            using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\output08.txt"))
-            //using (System.IO.StreamReader reader = new System.IO.StreamReader(@"d:\Dia\Projects\hackerrank\RKSumOutput"))
+        public override void CreateAnswers(System.IO.StreamReader reader)
+        {
+            while(!reader.EndOfStream)
             {
-                for (int i = 0; i < sq; i++)
-                {
-                    RKSumAnswer ans = new RKSumAnswer() { a = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp)) };
-                    Answers.Add(ans);
-                }
+                RKSumAnswer ans = new RKSumAnswer() { a = Array.ConvertAll(reader.ReadLine().Split(' '), sTemp => Convert.ToInt64(sTemp)) };
+                Answers.Add(ans);
             }
 
         }
 
 
-        public override void GenSamples()
+
+        public override void AddManualSamples()
         {
-
-
-            LoadSamples();
-
 
             Samples.Add(new RKSumSample() { N = 1, K = 3, seq = new Int64[] { 3 } });
             Answers.Add(new RKSumAnswer() { a = new Int64[] { 1 } });
@@ -96,25 +88,6 @@ namespace HackerRank
             Answers.Add(new RKSumAnswer() { a = new Int64[] { 6, 28 } });
             Samples.Add(new RKSumSample() { N = 3, K = 2, seq = new Int64[] { 2, 3, 4, 4, 5, 6 } });
             Answers.Add(new RKSumAnswer() { a = new Int64[] { 1, 2, 3 } });
-
-
-            Int32 SelectedCase = -1;
-
-            //SelectedCase = 0;
-
-            if (SelectedCase != -1)
-            {
-                //AnswerStats(Answers[SelectedCase], Samples[SelectedCase]);
-                Samples = new List<RKSumSample>() { Samples[SelectedCase] };
-                Answers = new List<RKSumAnswer>() { Answers[SelectedCase] };
-            }
-
-
-
-
-            /**/
-
-
         }
 
         public void SampleStats(RKSumSample sample)
@@ -152,8 +125,9 @@ namespace HackerRank
         }
 
         [SolutionMethod]
-        public RKSumAnswer BF3(RKSumSample sample)
+        public TAnswer BF3(TSample Sample)
         {
+            RKSumSample sample = Sample as RKSumSample;
             Int32 n = sample.N;
             Int64 k = sample.K;
             Int64[] s = sample.seq;

@@ -9,7 +9,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class SpecialStringAgainSample
+    public class SpecialStringAgainSample: TSample
     {
         public String s;
         public override string ToString()
@@ -18,120 +18,44 @@ namespace HackerRank
         }
     }
 
-    public class SpecialStringAgainAnswer
+    public class SpecialStringAgainAnswer: TAnswer
     {
         public Int64 result;
         public override string ToString()
         {
             return result.ToString();
-            /*
-            if (arr == null)
-            {
-                return "[]";
-            }
-            StringBuilder SB = new StringBuilder();
-            foreach (var item in arr)
-            {
-                SB.Append($"{item} ");
-            }
-            return SB.ToString().Trim();
-            */
+        }
+        public override Boolean Equals(Object obj)
+        {
+            return (obj as SpecialStringAgainAnswer)?.result == this.result;
+
         }
     }
 
 
-    class SpecialStringAgain : TProblem<SpecialStringAgainSample, SpecialStringAgainAnswer>
+    class SpecialStringAgain : TProblem
     {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, SpecialStringAgainAnswer Answer)
+        public override void CreateSamples(System.IO.StreamReader reader)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.result == Answers?[SampleID]?.result;
-            /*
-             if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
-            {
-                return false;
-            }
+            reader.ReadLine();
+            SpecialStringAgainSample sample = new SpecialStringAgainSample() { s = reader.ReadLine() };
+            Samples.Add(sample);
 
-            for (int i = 0; i < Answer.arr.Length; i++)
-            {
-                if (Answer.arr[i] != Answers[SampleID].arr[i])
-                {
-                    return false;
-                }
-            }
-
-            return true; 
-             */
-        }
-        private void LoadSamples(String opt, String opt2 = "")
-        {
-            void LoadFile(String InputFile, String OutputFile)
-            {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile))
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-                    reader.ReadLine();
-                    SpecialStringAgainSample sample = new SpecialStringAgainSample() { s = reader.ReadLine() };
-                    Samples.Add(sample);
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-
-                    SpecialStringAgainAnswer ans = new SpecialStringAgainAnswer() { result = Convert.ToInt64(reader.ReadLine()) };
-                    Answers.Add(ans);
-                }
-            }
-
-
-
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
-            }
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(System.IO.StreamReader reader)
         {
-            LoadSamples("All");
+            SpecialStringAgainAnswer ans = new SpecialStringAgainAnswer() { result = Convert.ToInt64(reader.ReadLine()) };
+            Answers.Add(ans);
+
         }
-
-
+       
 
         [SolutionMethod]
-        public SpecialStringAgainAnswer DP(SpecialStringAgainSample sample)
+        public TAnswer DP(TSample Sample)
         {
+            SpecialStringAgainSample sample = Sample as SpecialStringAgainSample;
+
             String s = sample.s;
             Int64 result = 0;
             Int64[] F = new Int64[s.Length+1];
@@ -180,15 +104,7 @@ namespace HackerRank
             return new SpecialStringAgainAnswer() { result = result };
         }
 
-        //[SolutionMethod]
-        public SpecialStringAgainAnswer stub(SpecialStringAgainSample sample)
-        {
-            String s = sample.s;
-            Int64 result = 0;
-
-
-            return new SpecialStringAgainAnswer() { result = result };
-        }
+        
 
 
     }

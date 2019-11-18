@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace HackerRank
 {
 
-    public class CountingInversionsSample
+    public class CountingInversionsSample:TSample
     {
         public Int32[] arr;
 
@@ -19,7 +20,7 @@ namespace HackerRank
         }
     }
 
-    public class CountingInversionsAnswer
+    public class CountingInversionsAnswer: TAnswer
     {
         public Int64 result;
         public override string ToString()
@@ -38,17 +39,10 @@ namespace HackerRank
             return SB.ToString().Trim();
             */
         }
-    }
-
-
-    class CountingInversions : TProblem<CountingInversionsSample, CountingInversionsAnswer>
-    {
-        private Random rnd = new Random();
-
-        public override bool CheckAnswer(int SampleID, CountingInversionsAnswer Answer)
+        public override Boolean Equals(Object obj)
         {
-            //return base.CheckAnswer(SampleID, Answer);
-            return Answer?.result == Answers?[SampleID]?.result;
+            return (obj as CountingInversionsAnswer)?.result == this.result;
+
             /*
              if (Answer?.arr?.Length != Answers?[SampleID]?.arr?.Length)
             {
@@ -62,86 +56,37 @@ namespace HackerRank
                     return false;
                 }
             }
-
-            return true; 
-             */
+            */
         }
-        private void LoadSamples(String opt, String opt2 = "")
+    }
+
+
+    class CountingInversions : TProblem
+    {
+
+
+        public override void CreateSamples(System.IO.StreamReader reader)
         {
-            void LoadFile(String InputFile, String OutputFile)
+            int t = Convert.ToInt32(reader.ReadLine());
+
+            for (int tItr = 0; tItr < t; tItr++)
             {
-                if (!System.IO.File.Exists(InputFile) || !System.IO.File.Exists(OutputFile))
-                {
-                    Console.WriteLine($"files {InputFile} or {OutputFile} not found");
-                    return;
-                }
+                int n = Convert.ToInt32(reader.ReadLine());
 
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(InputFile))
-                {
-
-                    int t = Convert.ToInt32(reader.ReadLine());
-
-                    for (int tItr = 0; tItr < t; tItr++)
-                    {
-                        int n = Convert.ToInt32(reader.ReadLine());
-
-                        int[] arr = Array.ConvertAll(reader.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
-                        CountingInversionsSample sample = new CountingInversionsSample() { arr = arr };
-                        Samples.Add(sample);
-                    }
-
-
-                }
-
-
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(OutputFile))
-                {
-                    while (!reader.EndOfStream)
-                    {
-                        CountingInversionsAnswer ans = new CountingInversionsAnswer() { result = Convert.ToInt64(reader.ReadLine()) };
-                        Answers.Add(ans);
-
-                    }
-                }
-            }
-
-
-
-            //String SamplesDir = $"{AppDomain.CurrentDomain.BaseDirectory}\\Samples\\{this.GetType().Name}\\";
-            String SamplesDir = $"{Properties.Settings.Default["SamplesBaseDir"]}\\{this.GetType().Name}\\";
-            if (!System.IO.Directory.Exists(SamplesDir))
-            {
-                Console.WriteLine($"Directory {SamplesDir} not exists");
-                return;
-            }
-
-            if (opt == "All")
-            {
-                foreach (var file in System.IO.Directory.GetFiles(SamplesDir, "*input*"))
-                {
-                    LoadFile(file, file.Replace("input", "output"));
-                }
-            }
-            else
-            {
-                if (Int32.TryParse(opt, out Int32 sampleNumber))
-                {
-                    LoadFile($"{SamplesDir}input{opt}.txt", $"{SamplesDir}output{opt}.txt");
-                }
-
-                else
-                {
-                    LoadFile(opt, opt2);
-                }
+                int[] arr = Array.ConvertAll(reader.ReadLine().Split(' '), arrTemp => Convert.ToInt32(arrTemp));
+                CountingInversionsSample sample = new CountingInversionsSample() { arr = arr };
+                Samples.Add(sample);
             }
         }
 
-        public override void GenSamples()
+        public override void CreateAnswers(StreamReader reader)
         {
-            LoadSamples("All");
+            while (!reader.EndOfStream)
+            {
+                CountingInversionsAnswer ans = new CountingInversionsAnswer() { result = Convert.ToInt64(reader.ReadLine()) };
+                Answers.Add(ans);
 
-            //Samples = new List<CountingInversionsSample>() { Samples[3] };
-            //Answers = new List<CountingInversionsAnswer>() { Answers[3] };
+            }
 
         }
 
@@ -265,9 +210,12 @@ namespace HackerRank
 
             return result;
         }
-        [SolutionMethod]
-        public CountingInversionsAnswer MS2(CountingInversionsSample sample)
+
+        //[SolutionMethod]
+        public TAnswer MS2(TSample Sample)
         {
+            CountingInversionsSample sample = Sample as CountingInversionsSample;
+
             Int32[] arr = new Int32[sample.arr.Length];
             Array.Copy(sample.arr, arr, arr.Length);
 
@@ -281,6 +229,7 @@ namespace HackerRank
         //[SolutionMethod]
         public CountingInversionsAnswer MS(CountingInversionsSample sample)
         {
+
             Int32[] arr = new Int32[sample.arr.Length];
             Array.Copy(sample.arr, arr, arr.Length);
 
@@ -477,8 +426,10 @@ namespace HackerRank
             return count;
         }
         [SolutionMethod]
-        public CountingInversionsAnswer stub(CountingInversionsSample sample)
+        public TAnswer stub(TSample Sample)
         {
+            CountingInversionsSample sample = Sample as CountingInversionsSample;
+
             Int32[] arr = sample.arr;
             Int64 result = mergeSort(arr, 0, arr.Length - 1);
             return new CountingInversionsAnswer() { result = result };

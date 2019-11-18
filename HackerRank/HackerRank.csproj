@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="birthdayCakeCandles.cs" />
     <Compile Include="Abbreviate.cs" />
     <Compile Include="GreedyMaxMin.cs" />
     <Compile Include="SpecialStringAgain.cs" />
@@ -59,7 +58,6 @@
     <Compile Include="StonePiles.cs" />
     <Compile Include="PowerSum.cs" />
     <Compile Include="RKSum.cs" />
-    <Compile Include="ClosestNumbers.cs" />
     <Compile Include="CoinChange.cs" />
     <Compile Include="AlmostSorted.cs" />
     <Compile Include="NewYearChaos.cs" />
@@ -74,21 +72,19 @@
     <Compile Include="ReverseShuffleMerge.cs" />
     <Compile Include="IceCreamParlor.cs" />
     <Compile Include="MaximumSubarraySum.cs" />
-    <Compile Include="ValidStrings.cs" />
     <Compile Include="TemplateProblem.cs" />
     <Compile Include="PrimeXOR.cs" />
     <Compile Include="FairCut.cs" />
-    <Compile Include="PlusMinus.cs" />
     <Compile Include="FBModified.cs" />
-    <Compile Include="Stairs.cs" />
-    <Compile Include="MiniMaxSum.cs" />
     <Compile Include="SamAndSubstrings.cs" />
     <Compile Include="TProblem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
