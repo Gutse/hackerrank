@@ -11,7 +11,7 @@ namespace HackerRank
     class Program
     {
         static TProblem GetProblem() {
-            return new StonePiles();
+            return new DnaHealth();
         }
 
 
